@@ -27,11 +27,21 @@ export default {
   display: flex;
   flex-direction: column;
   row-gap: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    transform: scale(1.1);
+  }
+  &:hover > &__date-wrapper {
+    border: 2px solid $color-black;
+  }
   &__date-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: 10px;
+    border: 2px solid $color-white;
+    transition: 0.3s;
     .dates-list-item__week-day {
       @include default-headline(14px, 14px, $color-light-gray);
     }

@@ -21,6 +21,7 @@ export default {
 @import "@/styles/global";
 
 .dates-list {
+  padding: 10px;
   display: flex;
   column-gap: 10px;
 }

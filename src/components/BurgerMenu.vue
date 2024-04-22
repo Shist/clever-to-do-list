@@ -18,7 +18,7 @@ export default {};
   cursor: pointer;
   transition: 0.3s;
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
   }
 }
 </style>
