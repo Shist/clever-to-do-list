@@ -1,8 +1,21 @@
 <template>
   <div class="dates-list-item">
-    <div class="dates-list-item__date-wrapper">
-      <h4 class="dates-list-item__week-day">Mon</h4>
-      <h4 class="dates-list-item__month-day">22</h4>
+    <div
+      class="dates-list-item__date-wrapper"
+      :class="{ 'dates-list-item__date-wrapper_active': isActive }"
+    >
+      <h4
+        class="dates-list-item__week-day"
+        :class="{ 'dates-list-item__week-day_active': isActive }"
+      >
+        Mon
+      </h4>
+      <h4
+        class="dates-list-item__month-day"
+        :class="{ 'dates-list-item__month-day_active': isActive }"
+      >
+        22
+      </h4>
     </div>
     <div class="dates-list-item__dots-wrapper">
       <div class="dates-list-item__dot dates-list-item__dot_undone"></div>
@@ -13,6 +26,13 @@
 
 <script>
 export default {
+  name: "dates-list-item",
+  props: {
+    isActive: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup() {
     return {};
   },
@@ -42,11 +62,21 @@ export default {
     border-radius: 10px;
     border: 2px solid $color-white;
     transition: 0.3s;
+    &_active {
+      background-color: $color-black;
+      border: 2px solid $color-black;
+    }
     .dates-list-item__week-day {
       @include default-headline(14px, 14px, $color-light-gray);
+      &_active {
+        color: $color-white;
+      }
     }
     .dates-list-item__month-day {
       @include default-headline(14px, 14px, $color-black);
+      &_active {
+        color: $color-white;
+      }
     }
   }
   &__dots-wrapper {

@@ -3,7 +3,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "burger-menu",
+};
 </script>
 
 <style scoped lang="scss">

@@ -17,6 +17,7 @@ import DatesList from "@/components/DatesList";
 import TasksList from "@/components/TasksList";
 
 export default {
+  name: "main-page",
   components: { BurgerMenu, DatesList, TasksList },
 };
 </script>
