@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h1>Добро пожаловать на главную страницу</h1>
+    <h1>Tasker</h1>
     <h2 class="test description">Да начнётся разработка проекта</h2>
+    <app-button>+ Create new task</app-button>
   </div>
 </template>
 

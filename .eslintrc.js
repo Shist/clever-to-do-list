@@ -23,5 +23,6 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
+    "css.lint.unknownAtRules": 0,
   },
 };
