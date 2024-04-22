@@ -1,8 +1,13 @@
 @import "@/styles/vars";
+@import "@/styles/templates";
 @import "@/styles/mixins";
 
-// Here we can create some global styles for all components
-.test {
-  background-color: $color-black;
-  font-family: $font-roboto;
+// Global container of whole page
+.global-container {
+  min-height: 100vh;
+  max-width: 1920px;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
