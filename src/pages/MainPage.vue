@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Добро пожаловать на главную страницу</h1>
-    <h2>Да начнётся разработка проекта</h2>
+    <h2 class="test description">Да начнётся разработка проекта</h2>
   </div>
 </template>
 
@@ -9,4 +9,10 @@
 export default {};
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped>
+@import "@/styles/global";
+
+.description {
+  @include default-headline(24px, 24px, red);
+}
+</style>

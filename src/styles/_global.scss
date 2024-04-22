@@ -1,0 +1,8 @@
+@import "@/styles/vars";
+@import "@/styles/mixins";
+
+// Here we can create some global styles for all components
+.test {
+  background-color: $color-black;
+  font-family: $font-roboto;
+}

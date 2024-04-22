@@ -1,0 +1,10 @@
+@import "@/styles/vars";
+
+// Here we can create some default templates and mixins for styles
+@mixin default-headline($font-size, $line-height, $text-color) {
+  padding: 8px;
+  font-weight: 700;
+  font-size: $font-size;
+  line-height: $line-height;
+  color: $text-color;
+}
