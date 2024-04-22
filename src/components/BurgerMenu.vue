@@ -7,6 +7,8 @@ export default {};
 </script>
 
 <style scoped lang="scss">
+@import "@/styles/global";
+
 .burger-btn {
   width: 40px;
   height: 40px;

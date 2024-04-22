@@ -1,0 +1,27 @@
+<template>
+  <div class="dates-list">
+    <dates-list-item />
+    <dates-list-item />
+    <dates-list-item />
+  </div>
+</template>
+
+<script>
+import DatesListItem from "@/components/DatesListItem";
+
+export default {
+  components: { DatesListItem },
+  setup() {
+    return {};
+  },
+};
+</script>
+
+<style scoped lang="scss">
+@import "@/styles/global";
+
+.dates-list {
+  display: flex;
+  column-gap: 10px;
+}
+</style>
