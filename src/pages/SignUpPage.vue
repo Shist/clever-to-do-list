@@ -38,7 +38,13 @@
         placeholder="Repeat password"
         required
       />
-      <button class="sign-up-page__confirm-btn" type="submit">Confirm</button>
+      <button
+        class="sign-up-page__confirm-btn"
+        type="submit"
+        @click="onConfirmBtnClicked"
+      >
+        Confirm
+      </button>
     </form>
     <h3 class="sign-up-page__sign-up-suggestion-headline">
       Already have an account?
@@ -50,8 +56,24 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
   name: "sign-up-page",
+  methods: {
+    ...mapMutations({
+      setVisibility: "snackbar/setVisibility",
+      setMessage: "snackbar/setMessage",
+      setIsPermanent: "snackbar/setIsPermanent",
+      setColorClass: "snackbar/setColorClass",
+    }),
+    onConfirmBtnClicked() {
+      this.setVisibility(true);
+      this.setMessage("Loading...");
+      this.setIsPermanent(true);
+      this.setColorClass("info");
+    },
+  },
 };
 </script>
 
