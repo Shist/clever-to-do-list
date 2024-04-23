@@ -1,7 +1,7 @@
 <template>
   <div class="sign-in-page">
     <form action="#" class="sign-in-page__form">
-      <h2 class="sign-in-page__headline">Sign in</h2>
+      <h2 class="sign-in-page__headline">Sign In</h2>
       <label class="sign-in-page__email-input-label" for="emailInput">
         Enter your email below:
       </label>
@@ -27,7 +27,7 @@
       <button class="sign-in-page__confirm-btn" type="submit">Confirm</button>
     </form>
     <h3 class="sign-in-page__sign-up-suggestion-headline">
-      Don't have account yet?
+      Don't have an account yet?
     </h3>
     <a class="sign-in-page__sign-up-btn" @click="this.$router.push('/sign-up')">
       Sign up
@@ -89,6 +89,7 @@ export default {
   }
   &__sign-up-suggestion-headline {
     @include default-text(20px, 20px, $color-black);
+    margin-bottom: 5px;
   }
   &__sign-up-btn {
     @include default-btn(100px, $color-white, $color-orange);
