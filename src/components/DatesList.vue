@@ -6,62 +6,48 @@
       :date="dateArr[0]"
       :week-day="dateArr[1]"
       :isActive="index === currDateIndex"
-      @click="currDateIndex = index"
+      @click="setCurrDateIndex(index)"
     />
   </div>
 </template>
 
 <script>
-import { format } from "date-fns";
 import DatesListItem from "@/components/DatesListItem";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "dates-list",
   components: { DatesListItem },
-  data() {
-    return {
-      currDateIndex: 15,
-      daysAfter: 15,
-      daysBefore: 15,
-    };
-  },
   methods: {
+    ...mapMutations({
+      setCurrDateIndex: "dates/setCurrDateIndex",
+      setDaysAfter: "dates/setDaysAfter",
+      setDaysBefore: "dates/setDaysBefore",
+    }),
     checkDatesScroll() {
       const scrLeft = this.$refs.datesList.scrollLeft;
       const scrWidth = this.$refs.datesList.scrollWidth;
       const clWidth = this.$refs.datesList.clientWidth;
 
       if (scrLeft > scrWidth - clWidth - 50) {
-        this.daysAfter += 15;
+        this.setDaysAfter(this.daysAfter + 15);
         this.$refs.datesList.scrollLeft = scrWidth - 900;
       } else if (scrLeft < 50) {
-        this.daysBefore += 15;
-        this.currDateIndex += 15;
+        this.setDaysBefore(this.daysBefore + 15);
+        this.setCurrDateIndex(this.currDateIndex + 15);
         this.$refs.datesList.scrollLeft = 900;
       }
     },
   },
   computed: {
-    currentDates() {
-      const currDate = new Date();
-      const firstDate = new Date(
-        currDate.getTime() - this.daysBefore * 24 * 60 * 60 * 1000
-      );
-      const lastDate = new Date(
-        currDate.getTime() + this.daysAfter * 24 * 60 * 60 * 1000
-      );
-      const datesArr = [];
-
-      while (firstDate <= lastDate) {
-        datesArr.push([
-          firstDate.toLocaleDateString(),
-          format(firstDate, "iii"),
-        ]);
-        firstDate.setDate(firstDate.getDate() + 1);
-      }
-
-      return datesArr;
-    },
+    ...mapState({
+      currDateIndex: (state) => state.dates.currDateIndex,
+      daysAfter: (state) => state.dates.daysAfter,
+      daysBefore: (state) => state.dates.daysBefore,
+    }),
+    ...mapGetters({
+      currentDates: "dates/currentDates",
+    }),
   },
   mounted() {
     this.$refs.datesList.scrollLeft = 900;
