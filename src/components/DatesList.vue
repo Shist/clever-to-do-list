@@ -31,7 +31,6 @@ export default {
 
       if (scrLeft > scrWidth - clWidth - 50) {
         this.setDaysAfter(this.daysAfter + 15);
-        this.$refs.datesList.scrollLeft = scrWidth - 900;
       } else if (scrLeft < 50) {
         this.setDaysBefore(this.daysBefore + 15);
         this.setCurrDateIndex(this.currDateIndex + 15);

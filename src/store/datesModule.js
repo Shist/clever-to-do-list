@@ -27,6 +27,12 @@ export const datesModule = {
 
       return datesArr;
     },
+    currDate(state, getters) {
+      return getters.currentDates[state.currDateIndex][0];
+    },
+    currWeekDay(state, getters) {
+      return getters.currentDates[state.currDateIndex][1];
+    },
   },
   mutations: {
     setCurrDateIndex(state, currDateIndex) {

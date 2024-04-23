@@ -5,7 +5,9 @@
       <burger-menu />
     </div>
     <dates-list class="main-page__dates-list" />
-    <h2 class="main-page__tasks-list-headline">3 tasks for 22.04.2024 (Mon)</h2>
+    <h2 class="main-page__tasks-list-headline">
+      3 tasks for {{ currDate }} ({{ currWeekDay }})
+    </h2>
     <tasks-list class="main-page__tasks-list" />
     <app-button class="main-page__btn-add-task">+ Create new task</app-button>
   </div>
@@ -15,10 +17,17 @@
 import BurgerMenu from "@/components/BurgerMenu";
 import DatesList from "@/components/DatesList";
 import TasksList from "@/components/TasksList";
+import { mapGetters } from "vuex";
 
 export default {
   name: "main-page",
   components: { BurgerMenu, DatesList, TasksList },
+  computed: {
+    ...mapGetters({
+      currDate: "dates/currDate",
+      currWeekDay: "dates/currWeekDay",
+    }),
+  },
 };
 </script>
 
