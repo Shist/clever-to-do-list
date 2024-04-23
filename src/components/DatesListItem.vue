@@ -8,13 +8,13 @@
         class="dates-list-item__week-day"
         :class="{ 'dates-list-item__week-day_active': isActive }"
       >
-        Mon
+        {{ weekDay }}
       </h4>
       <h4
         class="dates-list-item__month-day"
         :class="{ 'dates-list-item__month-day_active': isActive }"
       >
-        22
+        {{ date.split(".")[0] }}
       </h4>
     </div>
     <div class="dates-list-item__dots-wrapper">
@@ -28,6 +28,14 @@
 export default {
   name: "dates-list-item",
   props: {
+    date: {
+      type: String,
+      required: true,
+    },
+    weekDay: {
+      type: String,
+      required: true,
+    },
     isActive: {
       type: Boolean,
       default: false,
@@ -40,7 +48,7 @@ export default {
 @import "@/styles/global";
 
 .dates-list-item {
-  width: 50px;
+  flex: 0 0 50px;
   display: flex;
   flex-direction: column;
   row-gap: 5px;
