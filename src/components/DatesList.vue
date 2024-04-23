@@ -6,6 +6,7 @@
       :date="dateArr[0]"
       :week-day="dateArr[1]"
       :isActive="index === currDateIndex"
+      @click="currDateIndex = index"
     />
   </div>
 </template>
