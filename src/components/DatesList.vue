@@ -1,11 +1,11 @@
 <template>
-  <div class="dates-list" ref="datesList">
+  <div class="dates-list" ref="datesList" @scroll="checkDatesScroll">
     <dates-list-item
       v-for="(dateArr, index) in currentDates"
       :key="dateArr[0]"
       :date="dateArr[0]"
       :week-day="dateArr[1]"
-      :isActive="index === 15"
+      :isActive="index === currDateIndex"
     />
   </div>
 </template>
@@ -17,11 +17,38 @@ import DatesListItem from "@/components/DatesListItem";
 export default {
   name: "dates-list",
   components: { DatesListItem },
+  data() {
+    return {
+      currDateIndex: 15,
+      daysAfter: 15,
+      daysBefore: 15,
+    };
+  },
+  methods: {
+    checkDatesScroll() {
+      const scrLeft = this.$refs.datesList.scrollLeft;
+      const scrWidth = this.$refs.datesList.scrollWidth;
+      const clWidth = this.$refs.datesList.clientWidth;
+
+      if (scrLeft > scrWidth - clWidth - 50) {
+        this.daysAfter += 15;
+        this.$refs.datesList.scrollLeft = scrWidth - 900;
+      } else if (scrLeft < 50) {
+        this.daysBefore += 15;
+        this.currDateIndex += 15;
+        this.$refs.datesList.scrollLeft = 900;
+      }
+    },
+  },
   computed: {
     currentDates() {
       const currDate = new Date();
-      const firstDate = new Date(currDate.getTime() - 15 * 24 * 60 * 60 * 1000);
-      const lastDate = new Date(currDate.getTime() + 15 * 24 * 60 * 60 * 1000);
+      const firstDate = new Date(
+        currDate.getTime() - this.daysBefore * 24 * 60 * 60 * 1000
+      );
+      const lastDate = new Date(
+        currDate.getTime() + this.daysAfter * 24 * 60 * 60 * 1000
+      );
       const datesArr = [];
 
       while (firstDate <= lastDate) {
