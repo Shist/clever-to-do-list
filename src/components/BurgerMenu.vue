@@ -1,12 +1,16 @@
 <template>
   <button class="burger-btn" @click="setMenuIsOpened(true)"></button>
   <teleport to=".global-container">
-    <div v-show="menuIsOpened" class="burger-menu">
+    <div
+      v-show="menuIsOpened"
+      class="burger-menu"
+      @click="setMenuIsOpened($event.target.className !== 'burger-menu')"
+    >
       <nav class="burger-menu__nav">
         <h2 class="burger_menu__headline">Menu</h2>
         <ul class="burger-menu__nav-list">
           <li class="burger-menu__nav-list-item">
-            <a class="burger-menu__link" @click="onSignInLinkClicked">
+            <a class="burger-menu__link" @click.stop="onSignInLinkClicked">
               Log out
             </a>
           </li>
