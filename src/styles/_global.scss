@@ -4,6 +4,7 @@
 
 // Global container of whole page
 .global-container {
+  position: relative;
   padding: 10px;
   min-height: 100vh;
   max-width: 1920px;
