@@ -8,9 +8,6 @@
 <script>
 export default {
   name: "tasks-list-item",
-  setup() {
-    return {};
-  },
 };
 </script>
 

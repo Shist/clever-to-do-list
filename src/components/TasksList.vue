@@ -12,9 +12,6 @@ import TasksListItem from "@/components/TasksListItem";
 export default {
   name: "tasks-list",
   components: { TasksListItem },
-  setup() {
-    return {};
-  },
 };
 </script>
 

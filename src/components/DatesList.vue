@@ -12,9 +12,6 @@ import DatesListItem from "@/components/DatesListItem";
 export default {
   name: "dates-list",
   components: { DatesListItem },
-  setup() {
-    return {};
-  },
 };
 </script>
 
