@@ -52,6 +52,7 @@ export default {
   methods: {
     ...mapMutations({
       setCurrToastId: "toast/setCurrToastId",
+      setCurrUser: "firebase/setCurrUser",
     }),
     ...mapActions({
       fetchUserByEmail: "firebase/fetchUserByEmail",
@@ -83,6 +84,7 @@ export default {
         }
 
         if (this.password !== this.currUser.password) {
+          this.setCurrUser(null);
           throw new Error("The password you entered is incorrect!");
         }
 

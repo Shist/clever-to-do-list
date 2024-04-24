@@ -67,6 +67,7 @@ export default {
   methods: {
     ...mapMutations({
       setCurrToastId: "toast/setCurrToastId",
+      setCurrUser: "firebase/setCurrUser",
     }),
     ...mapActions({
       fetchUserByEmail: "firebase/fetchUserByEmail",
@@ -123,6 +124,7 @@ export default {
         await this.fetchUserByEmail(this.email);
 
         if (this.currUser) {
+          this.setCurrUser(null);
           throw new Error(
             "A user with this email is already registered! Log in to your account or register another email."
           );
