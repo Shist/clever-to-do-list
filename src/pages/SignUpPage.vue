@@ -44,7 +44,7 @@
       <button
         class="sign-up-page__confirm-btn"
         type="submit"
-        @click="onConfirmBtnClicked"
+        @click.prevent="onConfirmBtnClicked"
       >
         Confirm
       </button>
@@ -60,46 +60,64 @@
 
 <script>
 import { toast } from "vue3-toastify";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "sign-up-page",
   methods: {
+    ...mapMutations({
+      setCurrToastId: "toast/setCurrToastId",
+    }),
+    getValidationError() {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      if (!this.email) {
+        return "Email can not be empty!";
+      } else if (!emailRegex.test(this.email)) {
+        return "Email you have entered is invalid!";
+      }
+
+      if (this.password.length < 8) {
+        return "Password can not be shorter than 8 characters!";
+      } else if (this.password.length > 28) {
+        return "Password can not be longer than 28 characters!";
+      } else if (this.password !== this.repeatPassword) {
+        return "The entered passwords do not match!";
+      }
+
+      return null;
+    },
     onConfirmBtnClicked() {
-      // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (this.currToastId) {
+        toast.remove(this.currToastId);
+        this.setCurrToastId(null);
+      }
 
-      // if (!inputEmail.value) {
-      //   return "Email can not be empty!";
-      // } else if (!emailRegex.test(inputEmail.value)) {
-      //   return "Email you have entered is invalid!";
-      // } else {
-      //   const q = "";
-      // }
+      const errorMsg = this.getValidationError();
 
-      // const enteredPassword = passwordInput.value;
-      // if (enteredPassword.length < 8) {
-      //   errorMsgLabel.textContent =
-      //     "Password can not be shorter than 8 characters!";
-      //   showElement(errorMsgLabel, "block");
-      // } else if (enteredPassword.length > 28) {
-      //   errorMsgLabel.textContent =
-      //     "Password can not be longer than 28 characters!";
-      //   showElement(errorMsgLabel, "block");
-      // } else if (enteredPassword !== repeatPasswordInput.value) {
-      //   errorMsgLabel.textContent = "The entered passwords do not match!";
-      //   showElement(errorMsgLabel, "block");
-      // } else {
-      //   const q = "";
-      // }
+      if (errorMsg) {
+        const newToastId = toast(`Error! ${errorMsg}`, {
+          type: "error",
+          position: toast.POSITION.BOTTOM_CENTER,
+          closeOnClick: false,
+        });
+        this.setCurrToastId(newToastId);
+        return;
+      }
 
-      toast("Loading . . .", {
+      const newToastId = toast("Loading . . .", {
         position: toast.POSITION.BOTTOM_CENTER,
         autoClose: false,
         closeOnClick: false,
         closeButton: false,
       });
+      this.setCurrToastId(newToastId);
     },
   },
   computed: {
+    ...mapState({
+      currToastId: (state) => state.toast.currToastId,
+    }),
     email: {
       get() {
         return this.$store.state.signUp.email;
