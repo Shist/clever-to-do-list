@@ -60,13 +60,17 @@
 
 <script>
 import { toast } from "vue3-toastify";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "sign-up-page",
   methods: {
     ...mapMutations({
       setCurrToastId: "toast/setCurrToastId",
+    }),
+    ...mapActions({
+      fetchUserByEmail: "firebase/fetchUserByEmail",
+      createNewUser: "firebase/createNewUser",
     }),
     getValidationError() {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -87,14 +91,16 @@ export default {
 
       return null;
     },
-    onConfirmBtnClicked() {
+    removeCurrToast() {
       if (this.currToastId) {
         toast.remove(this.currToastId);
         this.setCurrToastId(null);
       }
+    },
+    async onConfirmBtnClicked() {
+      this.removeCurrToast();
 
       const errorMsg = this.getValidationError();
-
       if (errorMsg) {
         const newToastId = toast(`Error! ${errorMsg}`, {
           type: "error",
@@ -105,18 +111,58 @@ export default {
         return;
       }
 
-      const newToastId = toast("Loading . . .", {
+      const loadingToastId = toast("Registering an account...", {
         position: toast.POSITION.BOTTOM_CENTER,
         autoClose: false,
         closeOnClick: false,
         closeButton: false,
       });
-      this.setCurrToastId(newToastId);
+      this.setCurrToastId(loadingToastId);
+
+      try {
+        await this.fetchUserByEmail(this.email);
+
+        if (this.currUser) {
+          throw new Error(
+            "A user with this email is already registered! Log in to your account or register another email."
+          );
+        }
+
+        await this.createNewUser({
+          email: this.email,
+          password: this.password,
+        });
+
+        this.removeCurrToast();
+        const successToastId = toast(
+          "Your account has been successfully registered!",
+          {
+            type: "success",
+            position: toast.POSITION.BOTTOM_CENTER,
+            closeOnClick: false,
+          }
+        );
+        this.setCurrToastId(successToastId);
+
+        this.$router.push("/");
+      } catch (error) {
+        this.removeCurrToast();
+        const errorToastId = toast(
+          `An error occurred while trying to register an account! ${error.message}`,
+          {
+            type: "error",
+            position: toast.POSITION.BOTTOM_CENTER,
+            closeOnClick: false,
+          }
+        );
+        this.setCurrToastId(errorToastId);
+      }
     },
   },
   computed: {
     ...mapState({
       currToastId: (state) => state.toast.currToastId,
+      currUser: (state) => state.firebase.currUser,
     }),
     email: {
       get() {

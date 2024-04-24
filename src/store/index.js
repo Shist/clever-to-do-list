@@ -4,6 +4,7 @@ import { datesModule } from "@/store/datesModule";
 import { signInModule } from "@/store/signInModule";
 import { signUpModule } from "@/store/signUpModule";
 import { toastModule } from "@/store/toastModule";
+import { firebaseModule } from "@/store/firebaseModule";
 
 export default createStore({
   state: {},
@@ -16,5 +17,6 @@ export default createStore({
     signIn: signInModule,
     signUp: signUpModule,
     toast: toastModule,
+    firebase: firebaseModule,
   },
 });

@@ -12,4 +12,8 @@ components.forEach((component) => {
   app.component(component.name, component);
 });
 
-app.use(router).use(store).use(Vue3Toasity).mount("#app");
+app
+  .use(router)
+  .use(store)
+  .use(Vue3Toasity, { clearOnUrlChange: false })
+  .mount("#app");
