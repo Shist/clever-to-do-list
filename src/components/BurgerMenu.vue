@@ -28,9 +28,11 @@ export default {
   methods: {
     ...mapMutations({
       setMenuIsOpened: "burgerMenu/setMenuIsOpened",
+      setCurrUser: "firebase/setCurrUser",
     }),
     onSignInLinkClicked() {
       this.setMenuIsOpened(false);
+      this.setCurrUser(null);
       this.$router.push("/sign-in");
     },
   },
