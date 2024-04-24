@@ -1,17 +1,25 @@
 <template>
-  <div class="tasks-list">
-    <tasks-list-item />
-    <tasks-list-item />
-    <tasks-list-item />
-  </div>
+  <ul class="tasks-list">
+    <tasks-list-item
+      v-for="task in currUser.tasks"
+      :task="task"
+      :key="task.id"
+    />
+  </ul>
 </template>
 
 <script>
 import TasksListItem from "@/components/TasksListItem";
+import { mapState } from "vuex";
 
 export default {
   name: "tasks-list",
   components: { TasksListItem },
+  computed: {
+    ...mapState({
+      currUser: (state) => state.firebase.currUser,
+    }),
+  },
 };
 </script>
 

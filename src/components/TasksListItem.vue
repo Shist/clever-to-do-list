@@ -1,13 +1,22 @@
 <template>
-  <div class="tasks-list-item">
-    <div class="tasks-list-item__status-circle"></div>
-    <span class="tasks-list-item__task-title">Make something incredible</span>
-  </div>
+  <li class="tasks-list-item">
+    <div
+      class="tasks-list-item__status-circle"
+      :class="{ 'tasks-list-item__status-circle_checked': task.checked }"
+    ></div>
+    <span class="tasks-list-item__task-title">{{ task.description }}</span>
+  </li>
 </template>
 
 <script>
 export default {
   name: "tasks-list-item",
+  props: {
+    task: {
+      type: Object,
+      required: true,
+    },
+  },
 };
 </script>
 
@@ -32,8 +41,25 @@ export default {
     height: 30px;
     width: 30px;
     min-width: 30px;
-    border: 4px solid $color-yellow;
     border-radius: 100%;
+    border: 4px solid $color-yellow;
+    &_checked {
+      border: 4px solid $color-light-orange;
+      background-color: $color-light-orange;
+      position: relative;
+      &::before {
+        content: "";
+        position: absolute;
+        top: -3px;
+        left: 3px;
+        transform: rotate(45deg);
+        width: 6px;
+        height: 10px;
+        border: solid $color-white;
+        border-width: 0 4px 4px 0;
+        transform-origin: bottom left;
+      }
+    }
   }
   &__task-title {
     @include default-text(16px, 16px, $color-black);
