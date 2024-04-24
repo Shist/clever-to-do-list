@@ -1,7 +1,6 @@
 import { createStore } from "vuex";
 import { datesModule } from "@/store/datesModule";
 import { burgerMenuModule } from "@/store/burgerMenuModule";
-import { infoSnackbarModule } from "@/store/infoSnackbarModule";
 
 export default createStore({
   state: {},
@@ -11,6 +10,5 @@ export default createStore({
   modules: {
     dates: datesModule,
     burgerMenu: burgerMenuModule,
-    snackbar: infoSnackbarModule,
   },
 });

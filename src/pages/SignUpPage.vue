@@ -56,22 +56,18 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { toast } from "vue3-toastify";
 
 export default {
   name: "sign-up-page",
   methods: {
-    ...mapMutations({
-      setVisibility: "snackbar/setVisibility",
-      setMessage: "snackbar/setMessage",
-      setIsPermanent: "snackbar/setIsPermanent",
-      setColorClass: "snackbar/setColorClass",
-    }),
     onConfirmBtnClicked() {
-      this.setVisibility(true);
-      this.setMessage("Loading...");
-      this.setIsPermanent(true);
-      this.setColorClass("info");
+      toast("Loading . . .", {
+        position: toast.POSITION.BOTTOM_CENTER,
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      });
     },
   },
 };
