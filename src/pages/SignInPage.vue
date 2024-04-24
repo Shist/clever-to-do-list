@@ -6,6 +6,7 @@
         Enter your email below:
       </label>
       <input
+        v-model="email"
         type="email"
         name="email"
         class="sign-in-page__email-input"
@@ -17,6 +18,7 @@
         Enter your password below:
       </label>
       <input
+        v-model="password"
         type="password"
         name="password"
         class="sign-in-page__password-input"
@@ -38,6 +40,24 @@
 <script>
 export default {
   name: "sign-in-page",
+  computed: {
+    email: {
+      get() {
+        return this.$store.state.signIn.email;
+      },
+      set(newValue) {
+        this.$store.commit("signIn/setEmail", newValue);
+      },
+    },
+    password: {
+      get() {
+        return this.$store.state.signIn.password;
+      },
+      set(newValue) {
+        this.$store.commit("signIn/setPassword", newValue);
+      },
+    },
+  },
 };
 </script>
 
@@ -60,7 +80,6 @@ export default {
     }
     .sign-in-page__email-input-label {
       @include default-text(24px, 24px, $color-black);
-      margin-bottom: 10px;
       @media (max-width: $phone-l) {
         font-size: 20px;
         line-height: 20px;
@@ -72,7 +91,6 @@ export default {
     }
     .sign-in-page__password-input-label {
       @include default-text(24px, 24px, $color-black);
-      margin-bottom: 10px;
       @media (max-width: $phone-l) {
         font-size: 20px;
         line-height: 20px;

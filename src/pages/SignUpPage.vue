@@ -6,6 +6,7 @@
         Enter your email below:
       </label>
       <input
+        v-model="email"
         type="email"
         name="email"
         class="sign-up-page__email-input"
@@ -17,6 +18,7 @@
         Enter your password below:
       </label>
       <input
+        v-model="password"
         type="password"
         name="password"
         class="sign-up-page__password-input"
@@ -31,6 +33,7 @@
         Repeat your password below:
       </label>
       <input
+        v-model="repeatPassword"
         type="password"
         name="repeat-password"
         class="sign-up-page__repeat-password-input"
@@ -62,12 +65,64 @@ export default {
   name: "sign-up-page",
   methods: {
     onConfirmBtnClicked() {
+      // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      // if (!inputEmail.value) {
+      //   return "Email can not be empty!";
+      // } else if (!emailRegex.test(inputEmail.value)) {
+      //   return "Email you have entered is invalid!";
+      // } else {
+      //   const q = "";
+      // }
+
+      // const enteredPassword = passwordInput.value;
+      // if (enteredPassword.length < 8) {
+      //   errorMsgLabel.textContent =
+      //     "Password can not be shorter than 8 characters!";
+      //   showElement(errorMsgLabel, "block");
+      // } else if (enteredPassword.length > 28) {
+      //   errorMsgLabel.textContent =
+      //     "Password can not be longer than 28 characters!";
+      //   showElement(errorMsgLabel, "block");
+      // } else if (enteredPassword !== repeatPasswordInput.value) {
+      //   errorMsgLabel.textContent = "The entered passwords do not match!";
+      //   showElement(errorMsgLabel, "block");
+      // } else {
+      //   const q = "";
+      // }
+
       toast("Loading . . .", {
         position: toast.POSITION.BOTTOM_CENTER,
         autoClose: false,
         closeOnClick: false,
         closeButton: false,
       });
+    },
+  },
+  computed: {
+    email: {
+      get() {
+        return this.$store.state.signUp.email;
+      },
+      set(newValue) {
+        this.$store.commit("signUp/setEmail", newValue);
+      },
+    },
+    password: {
+      get() {
+        return this.$store.state.signUp.password;
+      },
+      set(newValue) {
+        this.$store.commit("signUp/setPassword", newValue);
+      },
+    },
+    repeatPassword: {
+      get() {
+        return this.$store.state.signUp.repeatPassword;
+      },
+      set(newValue) {
+        this.$store.commit("signUp/setRepeatPassword", newValue);
+      },
     },
   },
 };
@@ -92,7 +147,6 @@ export default {
     }
     .sign-up-page__email-input-label {
       @include default-text(24px, 24px, $color-black);
-      margin-bottom: 10px;
       @media (max-width: $phone-l) {
         font-size: 20px;
         line-height: 20px;
@@ -104,7 +158,6 @@ export default {
     }
     .sign-up-page__password-input-label {
       @include default-text(24px, 24px, $color-black);
-      margin-bottom: 10px;
       @media (max-width: $phone-l) {
         font-size: 20px;
         line-height: 20px;
@@ -116,7 +169,6 @@ export default {
     }
     .sign-up-page__repeat-password-input-label {
       @include default-text(24px, 24px, $color-black);
-      margin-bottom: 10px;
       @media (max-width: $phone-l) {
         font-size: 19px;
         line-height: 19px;
