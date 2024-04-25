@@ -67,11 +67,9 @@ export default {
   methods: {
     ...mapMutations({
       setCurrToastId: "toast/setCurrToastId",
-      setCurrUser: "firebase/setCurrUser",
     }),
     ...mapActions({
-      fetchUserByEmail: "firebase/fetchUserByEmail",
-      createNewUser: "firebase/createNewUser",
+      signUpUser: "firebase/signUpUser",
     }),
     getValidationError() {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -121,19 +119,7 @@ export default {
       this.setCurrToastId(loadingToastId);
 
       try {
-        await this.fetchUserByEmail(this.email);
-
-        if (this.currUser) {
-          this.setCurrUser(null);
-          throw new Error(
-            "A user with this email is already registered! Log in to your account or register another email."
-          );
-        }
-
-        await this.createNewUser({
-          email: this.email,
-          password: this.password,
-        });
+        await this.signUpUser({ email: this.email, password: this.password });
 
         this.removeCurrToast();
         const successToastId = toast(
@@ -164,7 +150,6 @@ export default {
   computed: {
     ...mapState({
       currToastId: (state) => state.toast.currToastId,
-      currUser: (state) => state.firebase.currUser,
     }),
     email: {
       get() {

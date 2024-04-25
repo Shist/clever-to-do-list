@@ -21,18 +21,20 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "burger-menu",
   methods: {
     ...mapMutations({
       setMenuIsOpened: "burgerMenu/setMenuIsOpened",
-      setCurrUser: "firebase/setCurrUser",
     }),
-    onSignInLinkClicked() {
+    ...mapActions({
+      signOutUser: "firebase/signOutUser",
+    }),
+    async onSignInLinkClicked() {
       this.setMenuIsOpened(false);
-      this.setCurrUser(null);
+      await this.signOutUser();
       this.$router.push("/sign-in");
     },
   },

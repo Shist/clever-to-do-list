@@ -31,7 +31,7 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   if (to.path !== "/sign-in" && to.path !== "/sign-up") {
-    if (!store.state.firebase.currUser) {
+    if (!store.getters["firebase/getUserUid"]) {
       return "/sign-in";
     }
   }

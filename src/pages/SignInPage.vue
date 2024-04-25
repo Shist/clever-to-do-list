@@ -52,10 +52,9 @@ export default {
   methods: {
     ...mapMutations({
       setCurrToastId: "toast/setCurrToastId",
-      setCurrUser: "firebase/setCurrUser",
     }),
     ...mapActions({
-      fetchUserByEmail: "firebase/fetchUserByEmail",
+      signInUser: "firebase/signInUser",
     }),
     removeCurrToast() {
       if (this.currToastId) {
@@ -75,18 +74,7 @@ export default {
       this.setCurrToastId(loadingToastId);
 
       try {
-        await this.fetchUserByEmail(this.email);
-
-        if (!this.currUser) {
-          throw new Error(
-            "There is no user registered with this email! Specify another one or create a new account."
-          );
-        }
-
-        if (this.password !== this.currUser.password) {
-          this.setCurrUser(null);
-          throw new Error("The password you entered is incorrect!");
-        }
+        await this.signInUser({ email: this.email, password: this.password });
 
         this.removeCurrToast();
         const successToastId = toast("You have successfully logged in!", {
@@ -114,7 +102,6 @@ export default {
   computed: {
     ...mapState({
       currToastId: (state) => state.toast.currToastId,
-      currUser: (state) => state.firebase.currUser,
     }),
     email: {
       get() {

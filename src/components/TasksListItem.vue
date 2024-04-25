@@ -4,7 +4,7 @@
       class="tasks-list-item__status-circle"
       :class="{ 'tasks-list-item__status-circle_checked': task.checked }"
     ></div>
-    <span class="tasks-list-item__task-title">{{ task.description }}</span>
+    <span class="tasks-list-item__task-title">{{ task.title }}</span>
   </li>
 </template>
 

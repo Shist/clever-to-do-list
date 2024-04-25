@@ -1,38 +1,40 @@
-import { db } from "@/firebase.js";
-import { query, collection, getDocs, where, addDoc } from "firebase/firestore";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { getFirestore, addDoc, collection } from "firebase/firestore/lite";
 
 export const firebaseModule = {
-  state: () => ({
-    currUser: null,
-  }),
-  getters: {},
-  mutations: {
-    setCurrUser(state, currUser) {
-      state.currUser = currUser;
+  state: () => ({}),
+  getters: {
+    getUserUid() {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      return user ? user.uid : null;
     },
   },
+  mutations: {},
   actions: {
-    async fetchUserByEmail(context, email) {
-      const q = query(
-        collection(db, "users"),
-        where("email", "==", `${email}`)
-      );
-      const querySnap = await getDocs(q);
+    async signUpUser({ getters }, { email, password }) {
+      const auth = getAuth();
+      await createUserWithEmailAndPassword(auth, email, password);
 
-      if (querySnap.docs.length) {
-        context.commit("setCurrUser", querySnap.docs[0].data());
-      } else {
-        context.commit("setCurrUser", null);
-      }
-    },
-    async createNewUser(context, { email, password }) {
-      const userObj = {
-        email: email,
-        password: password,
-        tasks: [],
+      const db = getFirestore();
+      const taskObj = {
+        userUid: getters.getUserUid,
+        tasksList: [],
       };
-      await addDoc(collection(db, "users"), userObj);
-      context.commit("setCurrUser", userObj);
+      await addDoc(collection(db, "tasks"), taskObj);
+    },
+    async signInUser(context, { email, password }) {
+      const auth = getAuth();
+      await signInWithEmailAndPassword(auth, email, password);
+    },
+    async signOutUser() {
+      const auth = getAuth();
+      await signOut(auth);
     },
   },
   namespaced: true,
