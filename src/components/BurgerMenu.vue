@@ -21,10 +21,12 @@
 </template>
 
 <script>
+import toastMixin from "@/components/mixins/toastMixin.js";
 import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "burger-menu",
+  mixins: [toastMixin],
   methods: {
     ...mapMutations({
       setMenuIsOpened: "burgerMenu/setMenuIsOpened",
@@ -33,9 +35,15 @@ export default {
       signOutUser: "firebase/signOutUser",
     }),
     async onSignInLinkClicked() {
-      this.setMenuIsOpened(false);
-      await this.signOutUser();
-      this.$router.push("/sign-in");
+      try {
+        await this.signOutUser();
+        this.setMenuIsOpened(false);
+        this.$router.push("/sign-in");
+      } catch (error) {
+        this.setErrorToast(
+          `An error occurred while trying to log out! ${error.message}`
+        );
+      }
     },
   },
   computed: {
