@@ -29,13 +29,14 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to) => {
-  if (to.path !== "/sign-in" && to.path !== "/sign-up") {
-    if (!store.getters["firebase/getUserUid"]) {
-      return "/sign-in";
-    }
+router.beforeEach((to, from, next) => {
+  const userUid = store.getters["firebase/getUserUid"];
+
+  if (to.path === "/sign-in" || to.path === "/sign-up") {
+    userUid ? next("/") : next();
+  } else {
+    !userUid ? next("/sign-in") : next();
   }
-  return true;
 });
 
 export default router;
