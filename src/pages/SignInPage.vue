@@ -44,65 +44,30 @@
 </template>
 
 <script>
-import { toast } from "vue3-toastify";
-import { mapState, mapMutations, mapActions } from "vuex";
+import toastMixin from "@/components/mixins/toastMixin.js";
+import { mapActions } from "vuex";
 
 export default {
   name: "sign-in-page",
+  mixins: [toastMixin],
   methods: {
-    ...mapMutations({
-      setCurrToastId: "toast/setCurrToastId",
-    }),
     ...mapActions({
       signInUser: "firebase/signInUser",
     }),
-    removeCurrToast() {
-      if (this.currToastId) {
-        toast.remove(this.currToastId);
-        this.setCurrToastId(null);
-      }
-    },
     async onConfirmBtnClicked() {
-      this.removeCurrToast();
-
-      const loadingToastId = toast("Logging...", {
-        position: toast.POSITION.BOTTOM_CENTER,
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
-      this.setCurrToastId(loadingToastId);
-
+      this.setLoadingToast("Logging...");
       try {
         await this.signInUser({ email: this.email, password: this.password });
-
-        this.removeCurrToast();
-        const successToastId = toast("You have successfully logged in!", {
-          type: "success",
-          position: toast.POSITION.BOTTOM_CENTER,
-          closeOnClick: false,
-        });
-        this.setCurrToastId(successToastId);
-
+        this.setSuccessToast("You have successfully logged in!");
         this.$router.push("/");
       } catch (error) {
-        this.removeCurrToast();
-        const errorToastId = toast(
-          `An error occurred while trying to log in to account! ${error.message}`,
-          {
-            type: "error",
-            position: toast.POSITION.BOTTOM_CENTER,
-            closeOnClick: false,
-          }
+        this.setErrorToast(
+          `An error occurred while trying to log in to account! ${error.message}`
         );
-        this.setCurrToastId(errorToastId);
       }
     },
   },
   computed: {
-    ...mapState({
-      currToastId: (state) => state.toast.currToastId,
-    }),
     email: {
       get() {
         return this.$store.state.signIn.email;

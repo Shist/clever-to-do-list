@@ -59,15 +59,13 @@
 </template>
 
 <script>
-import { toast } from "vue3-toastify";
-import { mapState, mapMutations, mapActions } from "vuex";
+import toastMixin from "@/components/mixins/toastMixin";
+import { mapActions } from "vuex";
 
 export default {
   name: "sign-up-page",
+  mixins: [toastMixin],
   methods: {
-    ...mapMutations({
-      setCurrToastId: "toast/setCurrToastId",
-    }),
     ...mapActions({
       signUpUser: "firebase/signUpUser",
     }),
@@ -90,67 +88,25 @@ export default {
 
       return null;
     },
-    removeCurrToast() {
-      if (this.currToastId) {
-        toast.remove(this.currToastId);
-        this.setCurrToastId(null);
-      }
-    },
     async onConfirmBtnClicked() {
-      this.removeCurrToast();
-
       const errorMsg = this.getValidationError();
       if (errorMsg) {
-        const newToastId = toast(`Error! ${errorMsg}`, {
-          type: "error",
-          position: toast.POSITION.BOTTOM_CENTER,
-          closeOnClick: false,
-        });
-        this.setCurrToastId(newToastId);
+        this.setErrorToast(`Error! ${errorMsg}`);
         return;
       }
-
-      const loadingToastId = toast("Registering an account...", {
-        position: toast.POSITION.BOTTOM_CENTER,
-        autoClose: false,
-        closeOnClick: false,
-        closeButton: false,
-      });
-      this.setCurrToastId(loadingToastId);
-
+      this.setLoadingToast("Registering an account...");
       try {
         await this.signUpUser({ email: this.email, password: this.password });
-
-        this.removeCurrToast();
-        const successToastId = toast(
-          "Your account has been successfully registered!",
-          {
-            type: "success",
-            position: toast.POSITION.BOTTOM_CENTER,
-            closeOnClick: false,
-          }
-        );
-        this.setCurrToastId(successToastId);
-
+        this.setSuccessToast("Your account has been successfully registered!");
         this.$router.push("/");
       } catch (error) {
-        this.removeCurrToast();
-        const errorToastId = toast(
-          `An error occurred while trying to register an account! ${error.message}`,
-          {
-            type: "error",
-            position: toast.POSITION.BOTTOM_CENTER,
-            closeOnClick: false,
-          }
+        this.setErrorToast(
+          `An error occurred while trying to register an account! ${error.message}`
         );
-        this.setCurrToastId(errorToastId);
       }
     },
   },
   computed: {
-    ...mapState({
-      currToastId: (state) => state.toast.currToastId,
-    }),
     email: {
       get() {
         return this.$store.state.signUp.email;
