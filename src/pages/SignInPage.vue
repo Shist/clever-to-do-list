@@ -45,11 +45,12 @@
 
 <script>
 import toastMixin from "@/components/mixins/toastMixin.js";
+import errorMsgMixin from "@/components/mixins/errorMsgMixin.js";
 import { mapActions } from "vuex";
 
 export default {
   name: "sign-in-page",
-  mixins: [toastMixin],
+  mixins: [toastMixin, errorMsgMixin],
   methods: {
     ...mapActions({
       signInUser: "firebase/signInUser",
@@ -61,8 +62,9 @@ export default {
         this.setSuccessToast("You have successfully logged in!");
         this.$router.push("/");
       } catch (error) {
+        const errorMsg = this.getErrorMsg(error);
         this.setErrorToast(
-          `An error occurred while trying to log in to account! ${error.message}`
+          `An error occurred while trying to log in to account! ${errorMsg}`
         );
       }
     },

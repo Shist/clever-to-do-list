@@ -22,11 +22,12 @@
 
 <script>
 import toastMixin from "@/components/mixins/toastMixin.js";
+import errorMsgMixin from "@/components/mixins/errorMsgMixin.js";
 import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "burger-menu",
-  mixins: [toastMixin],
+  mixins: [toastMixin, errorMsgMixin],
   methods: {
     ...mapMutations({
       setMenuIsOpened: "burgerMenu/setMenuIsOpened",
@@ -40,8 +41,9 @@ export default {
         this.setMenuIsOpened(false);
         this.$router.push("/sign-in");
       } catch (error) {
+        const errorMsg = this.getErrorMsg(error);
         this.setErrorToast(
-          `An error occurred while trying to log out! ${error.message}`
+          `An error occurred while trying to log out! ${errorMsg}`
         );
       }
     },

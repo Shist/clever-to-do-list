@@ -60,11 +60,12 @@
 
 <script>
 import toastMixin from "@/components/mixins/toastMixin";
+import errorMsgMixin from "@/components/mixins/errorMsgMixin.js";
 import { mapActions } from "vuex";
 
 export default {
   name: "sign-up-page",
-  mixins: [toastMixin],
+  mixins: [toastMixin, errorMsgMixin],
   methods: {
     ...mapActions({
       signUpUser: "firebase/signUpUser",
@@ -100,8 +101,9 @@ export default {
         this.setSuccessToast("Your account has been successfully registered!");
         this.$router.push("/");
       } catch (error) {
+        const errorMsg = this.getErrorMsg(error);
         this.setErrorToast(
-          `An error occurred while trying to register an account! ${error.message}`
+          `An error occurred while trying to register an account! ${errorMsg}`
         );
       }
     },
