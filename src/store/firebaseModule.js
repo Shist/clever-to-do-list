@@ -21,30 +21,18 @@ export const firebaseModule = {
     },
   },
   actions: {
-    async signUpUser({ state, commit }, { email, password }) {
+    async signUpUser({ state }, { email, password }) {
       const auth = getAuth();
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      commit("setUserUid", userCredential.user.uid);
-      commit("setUserEmail", userCredential.user.email);
+      await createUserWithEmailAndPassword(auth, email, password);
 
       const db = getFirestore();
       await setDoc(doc(db, "tasks", state.userUid), {
         tasksList: [],
       });
     },
-    async signInUser({ commit }, { email, password }) {
+    async signInUser(context, { email, password }) {
       const auth = getAuth();
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      commit("setUserUid", userCredential.user.uid);
-      commit("setUserEmail", userCredential.user.email);
+      await signInWithEmailAndPassword(auth, email, password);
     },
     async signOutUser({ commit }) {
       const auth = getAuth();
