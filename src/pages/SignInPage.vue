@@ -60,6 +60,8 @@ export default {
       try {
         await this.signInUser({ email: this.email, password: this.password });
         this.setSuccessToast("You have successfully logged in!");
+        this.email = "";
+        this.password = "";
         this.$router.push("/");
       } catch (error) {
         const errorMsg = this.getErrorMsg(error);

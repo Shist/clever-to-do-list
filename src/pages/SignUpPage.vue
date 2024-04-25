@@ -99,6 +99,9 @@ export default {
       try {
         await this.signUpUser({ email: this.email, password: this.password });
         this.setSuccessToast("Your account has been successfully registered!");
+        this.email = "";
+        this.password = "";
+        this.repeatPassword = "";
         this.$router.push("/");
       } catch (error) {
         const errorMsg = this.getErrorMsg(error);
