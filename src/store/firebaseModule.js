@@ -7,34 +7,45 @@ import {
 import { getFirestore, addDoc, collection } from "firebase/firestore/lite";
 
 export const firebaseModule = {
-  state: () => ({}),
-  getters: {
-    getUserUid() {
-      const auth = getAuth();
-      const user = auth.currentUser;
-      return user ? user.uid : null;
+  state: () => ({
+    userUid: null,
+  }),
+  getters: {},
+  mutations: {
+    setUserUid(state, userUid) {
+      state.userUid = userUid;
     },
   },
-  mutations: {},
   actions: {
-    async signUpUser({ getters }, { email, password }) {
+    async signUpUser({ state, commit }, { email, password }) {
       const auth = getAuth();
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      commit("setUserUid", userCredential.user.uid);
 
       const db = getFirestore();
       const taskObj = {
-        userUid: getters.getUserUid,
+        userUid: state.userUid,
         tasksList: [],
       };
       await addDoc(collection(db, "tasks"), taskObj);
     },
-    async signInUser(context, { email, password }) {
+    async signInUser({ commit }, { email, password }) {
       const auth = getAuth();
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      commit("setUserUid", userCredential.user.uid);
     },
-    async signOutUser() {
+    async signOutUser({ commit }) {
       const auth = getAuth();
       await signOut(auth);
+      commit("setUserUid", null);
     },
   },
   namespaced: true,

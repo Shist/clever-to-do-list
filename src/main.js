@@ -38,6 +38,7 @@ onAuthStateChanged(auth, (user) => {
 
   if (user) {
     console.log("user auth OK --> main");
+    store.commit("firebase/setUserUid", user.uid);
   } else {
     console.log("user NOT auth --> sign-in");
   }
