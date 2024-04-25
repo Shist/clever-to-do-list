@@ -4,12 +4,13 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore/lite";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore/lite";
 
 export const firebaseModule = {
   state: () => ({
     userUid: null,
     userEmail: null,
+    userTasks: [],
   }),
   getters: {},
   mutations: {
@@ -18,6 +19,9 @@ export const firebaseModule = {
     },
     setUserEmail(state, userEmail) {
       state.userEmail = userEmail;
+    },
+    setUserTasks(state, userTasks) {
+      state.userTasks = userTasks;
     },
   },
   actions: {
@@ -39,6 +43,16 @@ export const firebaseModule = {
       await signOut(auth);
       commit("setUserUid", null);
       commit("setUserEmail", null);
+    },
+    async loadUserTasks({ state, commit }) {
+      const db = getFirestore();
+      const tasksRef = doc(db, "tasks", state.userUid);
+      const tasksSnap = await getDoc(tasksRef);
+      if (tasksSnap.exists()) {
+        commit("setUserTasks", tasksSnap.data().tasksList);
+      } else {
+        throw new Error("There is no tasks list for current user.");
+      }
     },
   },
   namespaced: true,

@@ -17,16 +17,32 @@
 import BurgerMenu from "@/components/BurgerMenu";
 import DatesList from "@/components/DatesList";
 import TasksList from "@/components/TasksList";
-import { mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
   name: "main-page",
   components: { BurgerMenu, DatesList, TasksList },
+  methods: {
+    ...mapActions({
+      loadUserTasks: "firebase/loadUserTasks",
+    }),
+  },
   computed: {
+    ...mapState({
+      userTasks: (state) => state.firebase.userTasks,
+    }),
     ...mapGetters({
       currDate: "dates/currDate",
       currWeekDay: "dates/currWeekDay",
     }),
+  },
+  mounted() {
+    // todo: set some spinner
+    try {
+      this.loadUserTasks().then(() => console.log(this.userTasks));
+    } catch (errpr) {
+      // todo: set toast
+    }
   },
 };
 </script>
