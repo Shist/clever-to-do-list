@@ -4,7 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, addDoc, collection } from "firebase/firestore/lite";
+import { getFirestore, doc, setDoc } from "firebase/firestore/lite";
 
 export const firebaseModule = {
   state: () => ({
@@ -32,11 +32,9 @@ export const firebaseModule = {
       commit("setUserEmail", userCredential.user.email);
 
       const db = getFirestore();
-      const taskObj = {
-        userUid: state.userUid,
+      await setDoc(doc(db, "tasks", state.userUid), {
         tasksList: [],
-      };
-      await addDoc(collection(db, "tasks"), taskObj);
+      });
     },
     async signInUser({ commit }, { email, password }) {
       const auth = getAuth();
