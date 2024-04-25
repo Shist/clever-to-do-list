@@ -38,5 +38,6 @@ onAuthStateChanged(auth, (user) => {
 
   if (user) {
     store.commit("firebase/setUserUid", user.uid);
+    store.commit("firebase/setUserEmail", user.email);
   }
 });

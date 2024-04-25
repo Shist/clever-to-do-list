@@ -9,11 +9,15 @@ import { getFirestore, addDoc, collection } from "firebase/firestore/lite";
 export const firebaseModule = {
   state: () => ({
     userUid: null,
+    userEmail: null,
   }),
   getters: {},
   mutations: {
     setUserUid(state, userUid) {
       state.userUid = userUid;
+    },
+    setUserEmail(state, userEmail) {
+      state.userEmail = userEmail;
     },
   },
   actions: {
@@ -25,6 +29,7 @@ export const firebaseModule = {
         password
       );
       commit("setUserUid", userCredential.user.uid);
+      commit("setUserEmail", userCredential.user.email);
 
       const db = getFirestore();
       const taskObj = {
@@ -41,11 +46,13 @@ export const firebaseModule = {
         password
       );
       commit("setUserUid", userCredential.user.uid);
+      commit("setUserEmail", userCredential.user.email);
     },
     async signOutUser({ commit }) {
       const auth = getAuth();
       await signOut(auth);
       commit("setUserUid", null);
+      commit("setUserEmail", null);
     },
   },
   namespaced: true,

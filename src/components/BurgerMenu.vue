@@ -7,6 +7,10 @@
       @click="setMenuIsOpened($event.target.className !== 'burger-menu')"
     >
       <nav class="burger-menu__nav">
+        <div class="burger-menu__curr-acc-wrapper">
+          <span class="burger-menu__curr-acc-label">Current account:</span>
+          <span class="burger-menu__curr-acc-email">{{ userEmail }}</span>
+        </div>
         <h2 class="burger_menu__headline">Menu</h2>
         <ul class="burger-menu__nav-list">
           <li class="burger-menu__nav-list-item">
@@ -51,6 +55,7 @@ export default {
   computed: {
     ...mapState({
       menuIsOpened: (state) => state.burgerMenu.menuIsOpened,
+      userEmail: (state) => state.firebase.userEmail,
     }),
   },
 };
@@ -87,6 +92,40 @@ export default {
     width: 100%;
     padding: 30px;
     background-color: $color-black;
+    @media (max-width: $tablet-l) {
+      padding: 20px;
+    }
+    @media (max-width: $phone-l) {
+      padding: 10px;
+    }
+    .burger-menu__curr-acc-wrapper {
+      margin-bottom: 30px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      row-gap: 10px;
+      .burger-menu__curr-acc-label {
+        @include default-headline(32px, 32px, $color-white);
+        @media (max-width: $tablet-l) {
+          font-size: 20px;
+          line-height: 20px;
+        }
+      }
+      .burger-menu__curr-acc-email {
+        @include default-text(28px, 28px, $color-white);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-wrap: nowrap;
+        @media (max-width: $tablet-l) {
+          font-size: 16px;
+          line-height: 16px;
+        }
+        @media (max-width: $phone-l) {
+          font-size: 12px;
+          line-height: 12px;
+        }
+      }
+    }
     .burger_menu__headline {
       @include default-headline(48px, 48px, $color-white);
       margin-bottom: 50px;
