@@ -1,15 +1,20 @@
 <template>
-  <div class="task-by-id-page">
+  <div v-if="currTask" class="task-by-id-page">
     <div class="task-by-id-page__back-btn-headline-wrapper">
       <button class="task-by-id-page__back-btn"></button>
-      <h1 class="task-by-id-page__headline">Task by ID page</h1>
+      <h1 class="task-by-id-page__headline">{{ getTaskLabel }}</h1>
     </div>
-    <tasks-list-item
-      v-if="currTask"
-      :task="currTask"
-      class="task-by-id-page__task-item"
-    />
-    <textarea class="task-by-id-page__task-description"></textarea>
+    <div class="task-by-id-page__task-item">
+      <div
+        class="task-by-id-page__task-status-circle"
+        :class="{ 'tasks-list-item__status-circle_checked': currTask.checked }"
+      ></div>
+      <input class="task-by-id-page__task-title" v-model="currTask.title" />
+    </div>
+    <textarea
+      class="task-by-id-page__task-description"
+      v-model="currTask.description"
+    ></textarea>
     <div class="task-by-id-page__bottom-btns-wrapper">
       <div class="task-by-id-page__delete-edit-btns-wrapper">
         <button class="task-by-id-page__delete-btn"></button>
@@ -21,7 +26,6 @@
 </template>
 
 <script>
-import TasksListItem from "@/components/TasksListItem";
 import fetchTasksMixin from "@/components/mixins/fetchTasksMixin.js";
 import toastMixin from "@/components/mixins/toastMixin.js";
 import { mapState, mapGetters } from "vuex";
@@ -29,7 +33,6 @@ import { mapState, mapGetters } from "vuex";
 export default {
   name: "task-by-id-page",
   mixins: [fetchTasksMixin, toastMixin],
-  components: { TasksListItem },
   data() {
     return {
       currTask: null,
@@ -41,17 +44,24 @@ export default {
     }),
     ...mapGetters({
       currTaskById: "firebase/currTaskById",
+      currDateById: "firebase/currDateById",
+      currWeekDayById: "firebase/currWeekDayById",
     }),
+    getTaskLabel() {
+      return `Task for ${this.currDateById(
+        this.$route.params.id
+      )} (${this.currWeekDayById(this.$route.params.id)})`;
+    },
   },
   async mounted() {
     if (!this.userTasks) {
-      this.setLoadingToast("Loading task...");
+      this.setLoadingToast("Loading tasks...");
       try {
         await this.fetchTasks();
-        this.setSuccessToast("The task was successfully loaded!");
+        this.setSuccessToast("The tasks were successfully loaded!");
       } catch (error) {
         this.setLoadingToast(
-          `An error occurred while trying to load task! ${error.message}`
+          `An error occurred while trying to load tasks! ${error.message}`
         );
       }
     }

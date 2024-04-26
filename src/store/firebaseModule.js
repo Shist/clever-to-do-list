@@ -5,6 +5,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore/lite";
+import { format } from "date-fns";
 
 export const firebaseModule = {
   state: () => ({
@@ -15,6 +16,19 @@ export const firebaseModule = {
   getters: {
     currTaskById: (state) => (id) => {
       return state.userTasks.find((task) => task.id === id);
+    },
+    currDateById: (state) => (id) => {
+      const date = state.userTasks.find((task) => task.id === id).date;
+      return new Date(
+        date.seconds * 1000 + date.nanoseconds / 1000000
+      ).toLocaleDateString();
+    },
+    currWeekDayById: (state) => (id) => {
+      const date = state.userTasks.find((task) => task.id === id).date;
+      return format(
+        new Date(date.seconds * 1000 + date.nanoseconds / 1000000),
+        "iii"
+      );
     },
   },
   mutations: {

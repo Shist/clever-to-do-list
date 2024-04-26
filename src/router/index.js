@@ -40,12 +40,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === "/sign-in" || to.path === "/sign-up") {
     userUid ? next("/") : next();
   } else {
-    if (to.path === "/tasks/:id") {
-      // todo
-      !userUid ? next("/sign-in") : next();
-    } else {
-      !userUid ? next("/sign-in") : next();
-    }
+    !userUid ? next("/sign-in") : next();
   }
 });
 
