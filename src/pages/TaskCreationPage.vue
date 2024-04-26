@@ -11,6 +11,7 @@
       Enter task title below:
     </label>
     <input
+      v-model="title"
       type="text"
       name="title"
       class="task-creation-page__title-input"
@@ -25,6 +26,7 @@
       Enter task description below:
     </label>
     <textarea
+      v-model="description"
       type="text"
       name="description"
       class="task-creation-page__description-textarea"
@@ -36,6 +38,7 @@
       Choose task date below:
     </label>
     <input
+      v-model="date"
       type="date"
       name="date"
       class="task-creation-page__date-input"
@@ -46,12 +49,13 @@
       Specify task completeness below:
     </label>
     <select
+      v-model="checked"
       name="checked"
       class="task-creation-page__checked-select"
       id="checkedSelect"
       required
     >
-      <option value="unckeched">Not completed</option>
+      <option value="unchecked">Not completed</option>
       <option value="checked">Completed</option>
     </select>
     <button
@@ -69,6 +73,40 @@ export default {
   name: "task-creation-page",
   methods: {
     async onCreateBtnClicked() {},
+  },
+  computed: {
+    title: {
+      get() {
+        return this.$store.state.taskCreation.title;
+      },
+      set(newValue) {
+        this.$store.commit("taskCreation/setTitle", newValue);
+      },
+    },
+    description: {
+      get() {
+        return this.$store.state.taskCreation.description;
+      },
+      set(newValue) {
+        this.$store.commit("taskCreation/setDescription", newValue);
+      },
+    },
+    date: {
+      get() {
+        return this.$store.state.taskCreation.date;
+      },
+      set(newValue) {
+        this.$store.commit("taskCreation/setDate", newValue);
+      },
+    },
+    checked: {
+      get() {
+        return this.$store.state.taskCreation.checked;
+      },
+      set(newValue) {
+        this.$store.commit("taskCreation/setChecked", newValue);
+      },
+    },
   },
 };
 </script>

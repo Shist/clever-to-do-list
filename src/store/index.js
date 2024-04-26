@@ -1,10 +1,11 @@
 import { createStore } from "vuex";
 import { burgerMenuModule } from "@/store/burgerMenuModule";
-import { datesAndTasksModule } from "@/store/datesAndTasksModule";
+import { firebaseModule } from "@/store/firebaseModule";
 import { signInModule } from "@/store/signInModule";
 import { signUpModule } from "@/store/signUpModule";
+import { datesAndTasksModule } from "@/store/datesAndTasksModule";
+import { taskCreationModule } from "@/store/taskCreationModule";
 import { toastModule } from "@/store/toastModule";
-import { firebaseModule } from "@/store/firebaseModule";
 
 export default createStore({
   state: {},
@@ -13,10 +14,11 @@ export default createStore({
   actions: {},
   modules: {
     burgerMenu: burgerMenuModule,
-    datesAndTasks: datesAndTasksModule,
+    firebase: firebaseModule,
     signIn: signInModule,
     signUp: signUpModule,
+    datesAndTasks: datesAndTasksModule,
+    taskCreation: taskCreationModule,
     toast: toastModule,
-    firebase: firebaseModule,
   },
 });
