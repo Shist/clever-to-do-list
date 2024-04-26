@@ -3,6 +3,7 @@ import MainPage from "../pages/MainPage.vue";
 import SignInPage from "../pages/SignInPage.vue";
 import SignUpPage from "../pages/SignUpPage.vue";
 import TaskByIdPage from "../pages/TaskByIdPage.vue";
+import TaskCreationPage from "../pages/TaskCreationPage.vue";
 import NotFoundPage from "../pages/NotFoundPage.vue";
 import store from "@/store";
 
@@ -22,6 +23,10 @@ const routes = [
   {
     path: "/tasks/:id",
     component: TaskByIdPage,
+  },
+  {
+    path: "/tasks/create-new-task",
+    component: TaskCreationPage,
   },
   {
     path: "/:catchAll(.*)",

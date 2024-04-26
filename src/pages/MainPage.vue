@@ -7,7 +7,12 @@
     <dates-list class="main-page__dates-list" />
     <h2 class="main-page__tasks-list-headline">{{ getTasksListLabel }}</h2>
     <tasks-list class="main-page__tasks-list" />
-    <app-button class="main-page__btn-add-task">+ Create new task</app-button>
+    <app-button
+      class="main-page__btn-add-task"
+      @click="this.$router.push('/tasks/create-new-task')"
+    >
+      + Create new task
+    </app-button>
   </div>
 </template>
 

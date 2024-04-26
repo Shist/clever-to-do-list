@@ -2,7 +2,7 @@
   <div v-if="currTask" class="task-by-id-page">
     <div class="task-by-id-page__back-btn-headline-wrapper">
       <button class="task-by-id-page__back-btn"></button>
-      <h1 class="task-by-id-page__headline">{{ getTaskLabel }}</h1>
+      <h2 class="task-by-id-page__headline">{{ getTaskLabel }}</h2>
     </div>
     <div class="task-by-id-page__task-item">
       <div
