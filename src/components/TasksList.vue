@@ -4,6 +4,7 @@
       v-for="task in currTasksList"
       :task="task"
       :key="task.id"
+      @click="this.$router.push(`/tasks/${task.id}`)"
     />
   </ul>
 </template>
