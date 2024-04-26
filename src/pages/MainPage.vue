@@ -5,9 +5,7 @@
       <burger-menu />
     </div>
     <dates-list class="main-page__dates-list" />
-    <h2 class="main-page__tasks-list-headline">
-      3 tasks for {{ currDate }} ({{ currWeekDay }})
-    </h2>
+    <h2 class="main-page__tasks-list-headline">{{ getTasksListLabel }}</h2>
     <tasks-list class="main-page__tasks-list" />
     <app-button class="main-page__btn-add-task">+ Create new task</app-button>
   </div>
@@ -17,12 +15,15 @@
 import BurgerMenu from "@/components/BurgerMenu";
 import DatesList from "@/components/DatesList";
 import TasksList from "@/components/TasksList";
-import { mapState, mapGetters, mapActions } from "vuex";
+import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "main-page",
   components: { BurgerMenu, DatesList, TasksList },
   methods: {
+    ...mapMutations({
+      setDatesTaskData: "dates/setDatesTaskData",
+    }),
     ...mapActions({
       loadUserTasks: "firebase/loadUserTasks",
     }),
@@ -34,12 +35,42 @@ export default {
     ...mapGetters({
       currDate: "dates/currDate",
       currWeekDay: "dates/currWeekDay",
+      currDateTasksAmount: "dates/currDateTasksAmount",
     }),
+    getTasksListLabel() {
+      if (this.currDateTasksAmount > 1) {
+        return `${this.currDateTasksAmount} tasks for ${this.currDate} (${this.currWeekDay})`;
+      } else if (this.currDateTasksAmount === 1) {
+        return `${this.currDateTasksAmount} task for ${this.currDate} (${this.currWeekDay})`;
+      } else {
+        return `No any tasks for ${this.currDate} (${this.currWeekDay})`;
+      }
+    },
   },
   mounted() {
     // todo: set some spinner
     try {
-      this.loadUserTasks().then(() => console.log(this.userTasks));
+      this.loadUserTasks().then(() => {
+        const datesInfoObj = {};
+
+        this.userTasks.forEach((task) => {
+          const dateStr = new Date(
+            task.date.seconds * 1000 + task.date.nanoseconds / 1000000
+          ).toLocaleDateString();
+
+          if (!datesInfoObj[dateStr]) {
+            datesInfoObj[dateStr] = [];
+          }
+
+          datesInfoObj[dateStr].push({
+            checked: task.checked,
+            title: task.title,
+            description: task.description,
+          });
+        });
+
+        this.setDatesTaskData(datesInfoObj);
+      });
     } catch (errpr) {
       // todo: set toast
     }

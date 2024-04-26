@@ -1,10 +1,12 @@
 <template>
   <div class="dates-list" ref="datesList" @scroll="checkDatesScroll">
     <dates-list-item
-      v-for="(dateArr, index) in currentDates"
-      :key="dateArr[0]"
-      :date="dateArr[0]"
-      :week-day="dateArr[1]"
+      v-for="(dateInfoObj, index) in currentDates"
+      :key="dateInfoObj.date"
+      :date="dateInfoObj.date"
+      :week-day="dateInfoObj.weekDay"
+      :unchecked-exist="dateInfoObj.uncheckedExist"
+      :checked-exist="dateInfoObj.checkedExist"
       :isActive="index === currDateIndex"
       @click="setCurrDateIndex(index)"
     />

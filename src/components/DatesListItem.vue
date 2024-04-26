@@ -18,8 +18,14 @@
       </h4>
     </div>
     <div class="dates-list-item__dots-wrapper">
-      <div class="dates-list-item__dot dates-list-item__dot_undone"></div>
-      <div class="dates-list-item__dot dates-list-item__dot_done"></div>
+      <div
+        v-if="uncheckedExist"
+        class="dates-list-item__dot dates-list-item__dot_undone"
+      ></div>
+      <div
+        v-if="checkedExist"
+        class="dates-list-item__dot dates-list-item__dot_done"
+      ></div>
     </div>
   </div>
 </template>
@@ -34,6 +40,14 @@ export default {
     },
     weekDay: {
       type: String,
+      required: true,
+    },
+    uncheckedExist: {
+      type: Boolean,
+      required: true,
+    },
+    checkedExist: {
+      type: Boolean,
       required: true,
     },
     isActive: {
