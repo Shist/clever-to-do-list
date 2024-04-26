@@ -22,7 +22,7 @@ export default {
   components: { BurgerMenu, DatesList, TasksList },
   methods: {
     ...mapMutations({
-      setDatesTaskData: "dates/setDatesTaskData",
+      setDatesTaskData: "datesAndTasks/setDatesTaskData",
     }),
     ...mapActions({
       loadUserTasks: "firebase/loadUserTasks",
@@ -33,9 +33,9 @@ export default {
       userTasks: (state) => state.firebase.userTasks,
     }),
     ...mapGetters({
-      currDate: "dates/currDate",
-      currWeekDay: "dates/currWeekDay",
-      currDateTasksAmount: "dates/currDateTasksAmount",
+      currDate: "datesAndTasks/currDate",
+      currWeekDay: "datesAndTasks/currWeekDay",
+      currDateTasksAmount: "datesAndTasks/currDateTasksAmount",
     }),
     getTasksListLabel() {
       if (this.currDateTasksAmount > 1) {

@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-export const datesModule = {
+export const datesAndTasksModule = {
   state: () => ({
     currDateIndex: 15,
     daysAfter: 15,

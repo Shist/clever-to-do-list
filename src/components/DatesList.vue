@@ -22,9 +22,9 @@ export default {
   components: { DatesListItem },
   methods: {
     ...mapMutations({
-      setCurrDateIndex: "dates/setCurrDateIndex",
-      setDaysAfter: "dates/setDaysAfter",
-      setDaysBefore: "dates/setDaysBefore",
+      setCurrDateIndex: "datesAndTasks/setCurrDateIndex",
+      setDaysAfter: "datesAndTasks/setDaysAfter",
+      setDaysBefore: "datesAndTasks/setDaysBefore",
     }),
     checkDatesScroll() {
       const scrLeft = this.$refs.datesList.scrollLeft;
@@ -42,12 +42,12 @@ export default {
   },
   computed: {
     ...mapState({
-      currDateIndex: (state) => state.dates.currDateIndex,
-      daysAfter: (state) => state.dates.daysAfter,
-      daysBefore: (state) => state.dates.daysBefore,
+      currDateIndex: (state) => state.datesAndTasks.currDateIndex,
+      daysAfter: (state) => state.datesAndTasks.daysAfter,
+      daysBefore: (state) => state.datesAndTasks.daysBefore,
     }),
     ...mapGetters({
-      currentDates: "dates/currentDates",
+      currentDates: "datesAndTasks/currentDates",
     }),
   },
   mounted() {

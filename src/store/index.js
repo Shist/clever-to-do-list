@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import { burgerMenuModule } from "@/store/burgerMenuModule";
-import { datesModule } from "@/store/datesModule";
+import { datesAndTasksModule } from "@/store/datesAndTasksModule";
 import { signInModule } from "@/store/signInModule";
 import { signUpModule } from "@/store/signUpModule";
 import { toastModule } from "@/store/toastModule";
@@ -13,7 +13,7 @@ export default createStore({
   actions: {},
   modules: {
     burgerMenu: burgerMenuModule,
-    dates: datesModule,
+    datesAndTasks: datesAndTasksModule,
     signIn: signInModule,
     signUp: signUpModule,
     toast: toastModule,
