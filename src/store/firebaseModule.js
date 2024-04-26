@@ -4,8 +4,16 @@ import {
   createUserWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore/lite";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore/lite";
 import { format } from "date-fns";
+import { v4 as uuidv4 } from "uuid";
 
 export const firebaseModule = {
   state: () => ({
@@ -71,6 +79,13 @@ export const firebaseModule = {
       } else {
         throw new Error("There is no tasks list for current user.");
       }
+    },
+    async uploadNewTask({ state }, taskData) {
+      taskData.id = uuidv4();
+      taskData.date = new Date(taskData.date);
+      const db = getFirestore();
+      const tasksRef = doc(db, "tasks", state.userUid);
+      await updateDoc(tasksRef, { tasksList: arrayUnion(taskData) });
     },
   },
   namespaced: true,

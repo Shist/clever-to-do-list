@@ -69,10 +69,42 @@
 </template>
 
 <script>
+import toastMixin from "@/mixins/toastMixin.js";
+import { mapActions } from "vuex";
+
 export default {
   name: "task-creation-page",
+  mixins: [toastMixin],
   methods: {
-    async onCreateBtnClicked() {},
+    ...mapActions({
+      uploadNewTask: "firebase/uploadNewTask",
+    }),
+    async onCreateBtnClicked() {
+      this.setLoadingToast("Uploading new task data to DB...");
+      try {
+        await this.uploadNewTask({
+          title: this.title,
+          description: this.description,
+          date: this.date,
+          checked: this.checked === "checked",
+        });
+        this.setSuccessToast("You have successfully created new task!");
+        this.title = "";
+        this.description = "";
+        this.date = new Date()
+          .toISOString()
+          .slice(0, 10)
+          .split(".")
+          .reverse()
+          .join("-");
+        this.checked = "unchecked";
+        this.$router.push("/");
+      } catch (error) {
+        this.setErrorToast(
+          `An error occurred while trying to create new task! ${error.message}`
+        );
+      }
+    },
   },
   computed: {
     title: {
