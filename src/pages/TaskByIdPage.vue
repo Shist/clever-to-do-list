@@ -20,7 +20,7 @@
         <button class="task-by-id-page__delete-btn"></button>
         <button class="task-by-id-page__edit-btn"></button>
       </div>
-      <button class="task-by-id-page__change-completness-btn"></button>
+      <button class="task-by-id-page__change-completness-btn">Complete</button>
     </div>
   </div>
 </template>
@@ -74,10 +74,86 @@ export default {
 @import "@/styles/global";
 
 .task-by-id-page {
+  flex-grow: 1;
+  @extend %default-wrapper;
   display: flex;
   flex-direction: column;
-  &__headline {
-    @include default-headline(36px, 36px, $color-black);
+  justify-content: flex-start;
+  row-gap: 20px;
+  &__back-btn-headline-wrapper {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    .task-by-id-page__back-btn {
+      width: 30px;
+      height: 30px;
+    }
+    .task-by-id-page__headline {
+      @include default-headline(36px, 36px, $color-black);
+    }
+  }
+  &__task-item {
+    padding: 10px;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    border-radius: 10px;
+    .task-by-id-page__task-status-circle {
+      height: 30px;
+      width: 30px;
+      min-width: 30px;
+      border-radius: 100%;
+      border: 4px solid $color-yellow;
+      &_checked {
+        border: 4px solid $color-light-orange;
+        background-color: $color-light-orange;
+        position: relative;
+        &::before {
+          content: "";
+          position: absolute;
+          top: -3px;
+          left: 3px;
+          transform: rotate(45deg);
+          width: 6px;
+          height: 10px;
+          border: solid $color-white;
+          border-width: 0 4px 4px 0;
+          transform-origin: bottom left;
+        }
+      }
+    }
+    .task-by-id-page__task-title {
+      @include default-text(16px, 16px, $color-black);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-wrap: nowrap;
+    }
+  }
+  &__task-description {
+    @include default-text(16px, 16px, $color-black);
+    min-height: 300px;
+    resize: none;
+  }
+  &__bottom-btns-wrapper {
+    padding: 10px;
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    .task-by-id-page__delete-edit-btns-wrapper {
+      display: flex;
+      column-gap: 10px;
+      .task-by-id-page__delete-btn {
+        width: 20px;
+        height: 20px;
+      }
+      .task-by-id-page__edit-btn {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .task-by-id-page__change-completness-btn {
+    }
   }
 }
 </style>
