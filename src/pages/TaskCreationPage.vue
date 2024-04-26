@@ -70,11 +70,12 @@
 
 <script>
 import toastMixin from "@/mixins/toastMixin.js";
+import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
 import { mapActions } from "vuex";
 
 export default {
   name: "task-creation-page",
-  mixins: [toastMixin],
+  mixins: [toastMixin, fetchTasksMixin],
   methods: {
     ...mapActions({
       uploadNewTask: "firebase/uploadNewTask",
@@ -88,7 +89,6 @@ export default {
           date: this.date,
           checked: this.checked === "checked",
         });
-        this.setSuccessToast("You have successfully created new task!");
         this.title = "";
         this.description = "";
         this.date = new Date()
@@ -98,6 +98,10 @@ export default {
           .reverse()
           .join("-");
         this.checked = "unchecked";
+
+        await this.fetchTasks();
+
+        this.setSuccessToast("You have successfully created new task!");
         this.$router.push("/");
       } catch (error) {
         this.setErrorToast(
