@@ -1,10 +1,10 @@
 <template>
   <form action="#" class="task-creation-page">
     <div class="task-creation-page__back-btn-headline-wrapper">
-      <button
+      <app-left-arrow
         class="task-creation-page__back-btn"
         @click="this.$router.push('/')"
-      ></button>
+      />
       <h2 class="task-creation-page__headline">Create new task</h2>
     </div>
     <label class="task-creation-page__title-input-label" for="titleInput">
@@ -88,9 +88,7 @@ export default {
     align-items: center;
     column-gap: 10px;
     .task-creation-page__back-btn {
-      width: 30px;
       min-width: 30px;
-      height: 30px;
     }
     .task-creation-page__headline {
       @include default-headline(42px, 42px, $color-black);

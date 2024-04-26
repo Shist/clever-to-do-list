@@ -1,10 +1,10 @@
 <template>
   <div v-if="currTask" class="task-by-id-page">
     <div class="task-by-id-page__back-btn-headline-wrapper">
-      <button
+      <app-left-arrow
         class="task-by-id-page__back-btn"
         @click="this.$router.push('/')"
-      ></button>
+      />
       <h2 class="task-by-id-page__headline">{{ getTaskLabel }}</h2>
     </div>
     <div class="task-by-id-page__task-item">
@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import fetchTasksMixin from "@/components/mixins/fetchTasksMixin.js";
-import toastMixin from "@/components/mixins/toastMixin.js";
+import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
+import toastMixin from "@/mixins/toastMixin.js";
 import { mapState, mapGetters } from "vuex";
 
 export default {
@@ -88,9 +88,7 @@ export default {
     align-items: center;
     column-gap: 10px;
     .task-by-id-page__back-btn {
-      width: 30px;
       min-width: 30px;
-      height: 30px;
     }
     .task-by-id-page__headline {
       @include default-headline(36px, 36px, $color-black);
@@ -157,6 +155,7 @@ export default {
       }
     }
     .task-by-id-page__change-completness-btn {
+      @include default-btn(200px, $color-white, $color-orange);
     }
   }
 }

@@ -59,8 +59,8 @@
 </template>
 
 <script>
-import toastMixin from "@/components/mixins/toastMixin";
-import errorMsgMixin from "@/components/mixins/errorMsgMixin.js";
+import toastMixin from "@/mixins/toastMixin";
+import errorMsgMixin from "@/mixins/errorMsgMixin.js";
 import { mapActions } from "vuex";
 
 export default {
