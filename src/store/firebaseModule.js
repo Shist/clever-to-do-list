@@ -10,9 +10,13 @@ export const firebaseModule = {
   state: () => ({
     userUid: null,
     userEmail: null,
-    userTasks: [],
+    userTasks: null,
   }),
-  getters: {},
+  getters: {
+    currTaskById: (state) => (id) => {
+      return state.userTasks.find((task) => task.id === id);
+    },
+  },
   mutations: {
     setUserUid(state, userUid) {
       state.userUid = userUid;

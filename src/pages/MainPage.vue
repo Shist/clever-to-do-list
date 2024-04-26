@@ -15,19 +15,14 @@
 import BurgerMenu from "@/components/BurgerMenu";
 import DatesList from "@/components/DatesList";
 import TasksList from "@/components/TasksList";
-import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+import fetchTasksMixin from "@/components/mixins/fetchTasksMixin.js";
+import toastMixin from "@/components/mixins/toastMixin.js";
+import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "main-page",
+  mixins: [fetchTasksMixin, toastMixin],
   components: { BurgerMenu, DatesList, TasksList },
-  methods: {
-    ...mapMutations({
-      setDatesTaskData: "datesAndTasks/setDatesTaskData",
-    }),
-    ...mapActions({
-      loadUserTasks: "firebase/loadUserTasks",
-    }),
-  },
   computed: {
     ...mapState({
       userTasks: (state) => state.firebase.userTasks,
@@ -47,33 +42,18 @@ export default {
       }
     },
   },
-  mounted() {
-    // todo: set some spinner
+  async mounted() {
+    if (this.userTasks) {
+      return;
+    }
+    this.setLoadingToast("Loading tasks...");
     try {
-      this.loadUserTasks().then(() => {
-        const datesInfoObj = {};
-
-        this.userTasks.forEach((task) => {
-          const dateStr = new Date(
-            task.date.seconds * 1000 + task.date.nanoseconds / 1000000
-          ).toLocaleDateString();
-
-          if (!datesInfoObj[dateStr]) {
-            datesInfoObj[dateStr] = [];
-          }
-
-          datesInfoObj[dateStr].push({
-            id: task.id,
-            checked: task.checked,
-            title: task.title,
-            description: task.description,
-          });
-        });
-
-        this.setDatesTaskData(datesInfoObj);
-      });
-    } catch (errpr) {
-      // todo: set toast
+      await this.fetchTasks();
+      this.setSuccessToast("The tasks were successfully loaded!");
+    } catch (error) {
+      this.setLoadingToast(
+        `An error occurred while trying to load tasks! ${error.message}`
+      );
     }
   },
 };
