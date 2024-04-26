@@ -43,7 +43,6 @@
       />
       <button
         class="sign-up-page__confirm-btn"
-        type="submit"
         @click.prevent="onConfirmBtnClicked"
       >
         Confirm

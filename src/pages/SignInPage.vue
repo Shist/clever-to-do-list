@@ -28,7 +28,6 @@
       />
       <button
         class="sign-in-page__confirm-btn"
-        type="submit"
         @click.prevent="onConfirmBtnClicked"
       >
         Confirm

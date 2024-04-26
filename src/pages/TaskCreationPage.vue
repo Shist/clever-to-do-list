@@ -60,7 +60,6 @@
     </select>
     <button
       class="task-creation-page__confirm-btn"
-      type="submit"
       @click.prevent="onCreateBtnClicked"
     >
       Create
