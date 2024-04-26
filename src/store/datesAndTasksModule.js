@@ -51,6 +51,9 @@ export const datesAndTasksModule = {
     currDateTasksAmount(state, getters) {
       return getters.currentDates[state.currDateIndex].tasksAmount;
     },
+    currTasksList(state, getters) {
+      return state.datesTaskData[getters.currDate];
+    },
   },
   mutations: {
     setCurrDateIndex(state, currDateIndex) {

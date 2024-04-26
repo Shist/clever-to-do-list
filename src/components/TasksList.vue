@@ -1,7 +1,7 @@
 <template>
   <ul class="tasks-list">
     <tasks-list-item
-      v-for="task in tasksObj.tasks"
+      v-for="task in currTasksList"
       :task="task"
       :key="task.id"
     />
@@ -10,25 +10,15 @@
 
 <script>
 import TasksListItem from "@/components/TasksListItem";
+import { mapGetters } from "vuex";
 
 export default {
   name: "tasks-list",
   components: { TasksListItem },
-  data() {
-    return {
-      tasksObj: {
-        userUid: "3pFkRLfhgub4multDXK9gNuGoMM2",
-        tasks: [
-          {
-            id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d",
-            date: "April 25, 2024 at 12:00:00 AM UTC+3",
-            checked: true,
-            title: "First Task",
-            description: "Some description of the first task...",
-          },
-        ],
-      },
-    };
+  computed: {
+    ...mapGetters({
+      currTasksList: "datesAndTasks/currTasksList",
+    }),
   },
 };
 </script>
