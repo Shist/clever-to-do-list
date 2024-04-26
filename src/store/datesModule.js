@@ -23,18 +23,18 @@ export const datesModule = {
         const dateInfoObj = {
           date: firstDateStr,
           weekDay: format(firstDate, "iii"),
-          tasks: [],
           uncheckedExist: false,
           checkedExist: false,
+          tasksAmount: 0,
         };
         if (firstDateStr in state.datesTaskData) {
-          dateInfoObj.tasks = [...state.datesTaskData[firstDateStr]];
-          dateInfoObj.uncheckedExist = dateInfoObj.tasks.some(
+          dateInfoObj.uncheckedExist = state.datesTaskData[firstDateStr].some(
             (task) => !task.checked
           );
-          dateInfoObj.checkedExist = dateInfoObj.tasks.some(
+          dateInfoObj.checkedExist = state.datesTaskData[firstDateStr].some(
             (task) => task.checked
           );
+          dateInfoObj.tasksAmount = state.datesTaskData[firstDateStr].length;
         }
         datesArr.push(dateInfoObj);
         firstDate.setDate(firstDate.getDate() + 1);
@@ -49,7 +49,7 @@ export const datesModule = {
       return getters.currentDates[state.currDateIndex].weekDay;
     },
     currDateTasksAmount(state, getters) {
-      return getters.currentDates[state.currDateIndex].tasks.length;
+      return getters.currentDates[state.currDateIndex].tasksAmount;
     },
   },
   mutations: {

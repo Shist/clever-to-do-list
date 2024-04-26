@@ -63,6 +63,7 @@ export default {
           }
 
           datesInfoObj[dateStr].push({
+            id: task.id,
             checked: task.checked,
             title: task.title,
             description: task.description,
