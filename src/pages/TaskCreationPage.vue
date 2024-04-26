@@ -1,7 +1,10 @@
 <template>
   <form action="#" class="task-creation-page">
     <div class="task-creation-page__back-btn-headline-wrapper">
-      <button class="task-creation-page__back-btn"></button>
+      <button
+        class="task-creation-page__back-btn"
+        @click="this.$router.push('/')"
+      ></button>
       <h2 class="task-creation-page__headline">Create new task</h2>
     </div>
     <label class="task-creation-page__title-input-label" for="titleInput">
@@ -72,4 +75,61 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/styles/global";
+
+.task-creation-page {
+  flex-grow: 1;
+  @extend %default-wrapper;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  &__back-btn-headline-wrapper {
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    .task-creation-page__back-btn {
+      width: 30px;
+      min-width: 30px;
+      height: 30px;
+    }
+    .task-creation-page__headline {
+      @include default-headline(42px, 42px, $color-black);
+      @media (max-width: $phone-l) {
+        font-size: 24px;
+        line-height: 24px;
+      }
+    }
+  }
+  &__title-input-label,
+  &__description-textarea-label,
+  &__date-input-label,
+  &__checked-select-label {
+    @include default-text(24px, 24px, $color-black);
+    max-width: 500px;
+    width: 100%;
+    @media (max-width: $phone-l) {
+      font-size: 20px;
+      line-height: 20px;
+    }
+  }
+  &__title-input {
+    @extend %default-input;
+    margin-bottom: 20px;
+  }
+  &__description-textarea {
+    @extend %default-textarea;
+    margin-bottom: 20px;
+  }
+  &__date-input {
+    @extend %default-input;
+    margin-bottom: 20px;
+  }
+  &__checked-select {
+    @extend %default-input;
+    margin-bottom: 40px;
+  }
+  &__confirm-btn {
+    @include default-btn(200px, $color-white, $color-orange);
+  }
+}
 </style>

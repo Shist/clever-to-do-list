@@ -1,7 +1,10 @@
 <template>
   <div v-if="currTask" class="task-by-id-page">
     <div class="task-by-id-page__back-btn-headline-wrapper">
-      <button class="task-by-id-page__back-btn"></button>
+      <button
+        class="task-by-id-page__back-btn"
+        @click="this.$router.push('/')"
+      ></button>
       <h2 class="task-by-id-page__headline">{{ getTaskLabel }}</h2>
     </div>
     <div class="task-by-id-page__task-item">
@@ -86,6 +89,7 @@ export default {
     column-gap: 10px;
     .task-by-id-page__back-btn {
       width: 30px;
+      min-width: 30px;
       height: 30px;
     }
     .task-by-id-page__headline {
