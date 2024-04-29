@@ -125,11 +125,12 @@
 import { format } from "date-fns";
 import toastMixin from "@/mixins/toastMixin.js";
 import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
+import taskValidationMixin from "@/mixins/taskValidationMixin.js";
 import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "task-by-id-page",
-  mixins: [fetchTasksMixin, toastMixin],
+  mixins: [fetchTasksMixin, toastMixin, taskValidationMixin],
   data() {
     return {
       currTask: null,
@@ -190,6 +191,14 @@ export default {
       }
     },
     async onEditSaveBtnClicked() {
+      const errorMsg = this.getTaskValidationError(
+        this.title,
+        this.description
+      );
+      if (errorMsg) {
+        this.setErrorToast(`Error! ${errorMsg}`);
+        return;
+      }
       this.isLoading = true;
       this.setLoadingToast("Uploading task data changes to DB...");
       try {

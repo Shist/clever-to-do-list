@@ -71,16 +71,25 @@
 import { format } from "date-fns";
 import toastMixin from "@/mixins/toastMixin.js";
 import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
+import taskValidationMixin from "@/mixins/taskValidationMixin.js";
 import { mapActions } from "vuex";
 
 export default {
   name: "task-creation-page",
-  mixins: [toastMixin, fetchTasksMixin],
+  mixins: [toastMixin, fetchTasksMixin, taskValidationMixin],
   methods: {
     ...mapActions({
       uploadNewTask: "firebase/uploadNewTask",
     }),
     async onCreateBtnClicked() {
+      const errorMsg = this.getTaskValidationError(
+        this.title,
+        this.description
+      );
+      if (errorMsg) {
+        this.setErrorToast(`Error! ${errorMsg}`);
+        return;
+      }
       this.setLoadingToast("Uploading new task data to DB...");
       try {
         await this.uploadNewTask({
