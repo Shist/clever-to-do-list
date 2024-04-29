@@ -24,5 +24,10 @@ export default {
   &:hover {
     transform: scale(1.1);
   }
+  &:disabled {
+    transform: none;
+    background-color: $color-light-gray;
+    filter: grayscale(50%);
+  }
 }
 </style>

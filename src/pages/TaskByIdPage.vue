@@ -4,6 +4,7 @@
       <app-left-arrow
         class="task-by-id-page__back-btn"
         @click="onBackBtnClicked"
+        :disabled="isLoading"
       />
       <h2 class="task-by-id-page__headline">{{ getTaskLabel }}</h2>
     </div>
@@ -25,7 +26,7 @@
       id="editTitleInput"
       placeholder="Title"
       required
-      :disabled="!isEdit"
+      :disabled="!isEdit || isLoading"
     />
     <label
       class="task-by-id-page__task-description-label"
@@ -41,7 +42,7 @@
       id="editDescriptionTextarea"
       placeholder="Description"
       required
-      :disabled="!isEdit"
+      :disabled="!isEdit || isLoading"
     ></textarea>
     <label class="task-by-id-page__task-date-label" for="editDateInput">
       {{ getDateLabel }}
@@ -53,26 +54,26 @@
       class="task-by-id-page__task-date"
       id="editDateInput"
       required
-      :disabled="!isEdit"
+      :disabled="!isEdit || isLoading"
     />
     <div class="task-by-id-page__bottom-btns-wrapper">
       <div class="task-by-id-page__delete-edit-btns-wrapper">
         <button
           class="task-by-id-page__btn task-by-id-page__btn_delete"
           @click="deleteModalIsOpen = true"
-          :disabled="isEdit"
+          :disabled="isEdit || isLoading"
         ></button>
         <div class="task-by-id-page__gray-divider"></div>
         <div class="task-by-id-page__edit-btns-wrapper">
           <button
             class="task-by-id-page__btn task-by-id-page__btn_edit"
             @click="setIsEdit(!isEdit)"
-            :disabled="isEdit"
+            :disabled="isEdit || isLoading"
           ></button>
           <button
             class="task-by-id-page__edit-btn-confirm"
             @click="onEditSaveBtnClicked"
-            :disabled="!isEdit"
+            :disabled="!isEdit || isLoading"
           >
             Save
           </button>
@@ -80,7 +81,7 @@
       </div>
       <button
         class="task-by-id-page__change-completness-btn"
-        :disabled="isEdit"
+        :disabled="isEdit || isLoading"
       >
         Complete
       </button>
@@ -113,6 +114,7 @@ export default {
     return {
       currTask: null,
       deleteModalIsOpen: false,
+      isLoading: false,
     };
   },
   methods: {
@@ -121,12 +123,14 @@ export default {
     }),
     ...mapActions({
       changeExistingTask: "firebase/changeExistingTask",
+      deleteExistingTask: "firebase/deleteExistingTask",
     }),
     onBackBtnClicked() {
       this.setIsEdit(false);
       this.$router.push("/");
     },
     async onEditSaveBtnClicked() {
+      this.isLoading = true;
       this.setLoadingToast("Uploading task data changes to DB...");
       try {
         await this.changeExistingTask({
@@ -145,12 +149,29 @@ export default {
         this.setErrorToast(
           `An error occurred while trying to edit the task! ${error.message}`
         );
+      } finally {
+        this.isLoading = false;
       }
     },
     async onDeleteConfirmation() {
-      console.log("onDeleteConfirmation");
+      this.isLoading = true;
       this.deleteModalIsOpen = false;
-      // todo server request
+      this.setLoadingToast("Deleting task in DB...");
+      try {
+        await this.deleteExistingTask(this.$route.params.id);
+
+        await this.fetchTasks();
+
+        this.setSuccessToast("You have successfully deleted the task!");
+        this.$router.push("/");
+      } catch (error) {
+        console.error(error.message);
+        this.setErrorToast(
+          `An error occurred while trying to delete the task! ${error.message}`
+        );
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
   computed: {
@@ -223,16 +244,18 @@ export default {
       }
     }
     this.currTask = this.currTaskById(this.$route.params.id);
-    this.title = this.currTask.title;
-    this.description = this.currTask.description;
+    this.title = this.currTask?.title;
+    this.description = this.currTask?.description;
     this.date = format(
       new Date(
-        this.currTask.date.seconds * 1000 +
-          this.currTask.date.nanoseconds / 1000000
+        this.currTask
+          ? this.currTask.date.seconds * 1000 +
+            this.currTask.date.nanoseconds / 1000000
+          : null
       ),
       "yyyy-MM-dd"
     );
-    this.checked = this.currTask.checked;
+    this.checked = this.currTask?.checked;
   },
 };
 </script>

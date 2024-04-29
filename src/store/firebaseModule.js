@@ -26,17 +26,25 @@ export const firebaseModule = {
       return state.userTasks.find((task) => task.id === id);
     },
     currDateById: (state) => (id) => {
-      const date = state.userTasks.find((task) => task.id === id).date;
-      return new Date(
-        date.seconds * 1000 + date.nanoseconds / 1000000
-      ).toLocaleDateString();
+      const date = state.userTasks.find((task) => task.id === id)?.date;
+      if (date) {
+        return new Date(
+          date.seconds * 1000 + date.nanoseconds / 1000000
+        ).toLocaleDateString();
+      } else {
+        new Date().toLocaleDateString();
+      }
     },
     currWeekDayById: (state) => (id) => {
-      const date = state.userTasks.find((task) => task.id === id).date;
-      return format(
-        new Date(date.seconds * 1000 + date.nanoseconds / 1000000),
-        "eee"
-      );
+      const date = state.userTasks.find((task) => task.id === id)?.date;
+      if (date) {
+        return format(
+          new Date(date.seconds * 1000 + date.nanoseconds / 1000000),
+          "eee"
+        );
+      } else {
+        return format(new Date(), "eee");
+      }
     },
   },
   mutations: {
@@ -103,6 +111,20 @@ export const firebaseModule = {
         date: taskData.date,
         checked: taskData.checked,
       };
+      await updateDoc(userTasksRef, { tasksList });
+    },
+    async deleteExistingTask({ state }, taskId) {
+      const db = getFirestore();
+      const userTasksRef = doc(db, "tasks", state.userUid);
+      const tasksSnap = await getDoc(userTasksRef);
+      if (!tasksSnap.exists()) {
+        throw new Error("There is no tasks list for current user.");
+      }
+      const tasksList = tasksSnap.data().tasksList;
+      tasksList.splice(
+        tasksList.findIndex((task) => task.id === taskId),
+        1
+      );
       await updateDoc(userTasksRef, { tasksList });
     },
   },
