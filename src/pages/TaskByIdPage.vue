@@ -102,9 +102,9 @@
 
 <script>
 import { format } from "date-fns";
-import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
 import toastMixin from "@/mixins/toastMixin.js";
-import { mapState, mapGetters, mapMutations } from "vuex";
+import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "task-by-id-page",
@@ -119,13 +119,33 @@ export default {
     ...mapMutations({
       setIsEdit: "taskEdit/setIsEdit",
     }),
+    ...mapActions({
+      changeExistingTask: "firebase/changeExistingTask",
+    }),
     onBackBtnClicked() {
       this.setIsEdit(false);
       this.$router.push("/");
     },
     async onEditSaveBtnClicked() {
-      this.setIsEdit(false);
-      // todo server request
+      this.setLoadingToast("Uploading task data changes to DB...");
+      try {
+        await this.changeExistingTask({
+          id: this.$route.params.id,
+          title: this.title,
+          description: this.description,
+          date: this.date,
+          checked: this.checked === "checked",
+        });
+
+        await this.fetchTasks();
+
+        this.setSuccessToast("You have successfully edited the task!");
+        this.setIsEdit(false);
+      } catch (error) {
+        this.setErrorToast(
+          `An error occurred while trying to edit the task! ${error.message}`
+        );
+      }
     },
     async onDeleteConfirmation() {
       console.log("onDeleteConfirmation");

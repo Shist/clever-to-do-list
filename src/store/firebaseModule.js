@@ -72,8 +72,8 @@ export const firebaseModule = {
     },
     async loadUserTasks({ state, commit }) {
       const db = getFirestore();
-      const tasksRef = doc(db, "tasks", state.userUid);
-      const tasksSnap = await getDoc(tasksRef);
+      const userTasksRef = doc(db, "tasks", state.userUid);
+      const tasksSnap = await getDoc(userTasksRef);
       if (tasksSnap.exists()) {
         commit("setUserTasks", tasksSnap.data().tasksList);
       } else {
@@ -84,8 +84,26 @@ export const firebaseModule = {
       taskData.id = uuidv4();
       taskData.date = new Date(taskData.date);
       const db = getFirestore();
-      const tasksRef = doc(db, "tasks", state.userUid);
-      await updateDoc(tasksRef, { tasksList: arrayUnion(taskData) });
+      const userTasksRef = doc(db, "tasks", state.userUid);
+      await updateDoc(userTasksRef, { tasksList: arrayUnion(taskData) });
+    },
+    async changeExistingTask({ state }, taskData) {
+      taskData.date = new Date(taskData.date);
+      const db = getFirestore();
+      const userTasksRef = doc(db, "tasks", state.userUid);
+      const tasksSnap = await getDoc(userTasksRef);
+      if (!tasksSnap.exists()) {
+        throw new Error("There is no tasks list for current user.");
+      }
+      const tasksList = tasksSnap.data().tasksList;
+      tasksList[tasksList.findIndex((task) => task.id === taskData.id)] = {
+        id: taskData.id,
+        title: taskData.title,
+        description: taskData.description,
+        date: taskData.date,
+        checked: taskData.checked,
+      };
+      await updateDoc(userTasksRef, { tasksList });
     },
   },
   namespaced: true,
