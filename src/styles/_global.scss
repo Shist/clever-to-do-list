@@ -14,3 +14,9 @@
   flex-direction: column;
   background-color: $color-global-bg;
 }
+
+// Class which is needed to disable links while loading anything
+.disabled-link {
+  pointer-events: none;
+  filter: grayscale(50%);
+}

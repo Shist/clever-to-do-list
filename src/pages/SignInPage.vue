@@ -29,6 +29,7 @@
       <button
         class="sign-in-page__confirm-btn"
         @click.prevent="onConfirmBtnClicked"
+        :disabled="isLoading"
       >
         Confirm
       </button>
@@ -36,7 +37,11 @@
     <h3 class="sign-in-page__sign-up-suggestion-headline">
       Don't have an account yet?
     </h3>
-    <a class="sign-in-page__sign-up-btn" @click="this.$router.push('/sign-up')">
+    <a
+      class="sign-in-page__sign-up-btn"
+      @click="this.$router.push('/sign-up')"
+      :class="{ 'disabled-link': isLoading }"
+    >
       Sign up
     </a>
   </div>
@@ -50,11 +55,17 @@ import { mapActions } from "vuex";
 export default {
   name: "sign-in-page",
   mixins: [toastMixin, errorMsgMixin],
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
   methods: {
     ...mapActions({
       signInUser: "firebase/signInUser",
     }),
     async onConfirmBtnClicked() {
+      this.isLoading = true;
       this.setLoadingToast("Logging...");
       try {
         await this.signInUser({ email: this.email, password: this.password });
@@ -67,6 +78,8 @@ export default {
         this.setErrorToast(
           `An error occurred while trying to log in to account! ${errorMsg}`
         );
+      } finally {
+        this.isLoading = false;
       }
     },
   },
