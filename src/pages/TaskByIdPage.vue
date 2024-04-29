@@ -81,9 +81,16 @@
       </div>
       <button
         class="task-by-id-page__change-completness-btn"
+        @click="onCheckedBtnClicked"
         :disabled="isEdit || isLoading"
+        :class="{
+          'task-by-id-page__change-completness-btn_complete':
+            !currTask?.checked,
+          'task-by-id-page__change-completness-btn_incomplete':
+            currTask?.checked,
+        }"
       >
-        Complete
+        {{ currTask?.checked ? "Incomplete" : "Complete" }}
       </button>
     </div>
     <teleport to="body">
@@ -142,6 +149,46 @@ export default {
       this.setIsEdit(false);
       this.$router.push("/");
     },
+    updateCurrItem() {
+      this.currTask = this.currTaskById(this.$route.params.id);
+      this.title = this.currTask?.title;
+      this.description = this.currTask?.description;
+      this.date = format(
+        new Date(
+          this.currTask
+            ? this.currTask.date.seconds * 1000 +
+              this.currTask.date.nanoseconds / 1000000
+            : null
+        ),
+        "yyyy-MM-dd"
+      );
+      this.checked = this.currTask?.checked;
+    },
+    async onCheckedBtnClicked() {
+      this.isLoading = true;
+      this.setLoadingToast("Uploading task status to DB...");
+      try {
+        await this.changeExistingTask({
+          id: this.$route.params.id,
+          title: this.title,
+          description: this.description,
+          date: this.date,
+          checked: !this.checked,
+        });
+
+        await this.fetchTasks();
+        this.updateCurrItem();
+
+        this.setSuccessToast("You have successfully edited the task status!");
+        this.setIsEdit(false);
+      } catch (error) {
+        this.setErrorToast(
+          `An error occurred while trying to edit the task status! ${error.message}`
+        );
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async onEditSaveBtnClicked() {
       this.isLoading = true;
       this.setLoadingToast("Uploading task data changes to DB...");
@@ -151,10 +198,11 @@ export default {
           title: this.title,
           description: this.description,
           date: this.date,
-          checked: this.checked === "checked",
+          checked: this.checked,
         });
 
         await this.fetchTasks();
+        this.updateCurrItem();
 
         this.setSuccessToast("You have successfully edited the task!");
         this.setIsEdit(false);
@@ -259,19 +307,7 @@ export default {
         this.isLoading = false;
       }
     }
-    this.currTask = this.currTaskById(this.$route.params.id);
-    this.title = this.currTask?.title;
-    this.description = this.currTask?.description;
-    this.date = format(
-      new Date(
-        this.currTask
-          ? this.currTask.date.seconds * 1000 +
-            this.currTask.date.nanoseconds / 1000000
-          : null
-      ),
-      "yyyy-MM-dd"
-    );
-    this.checked = this.currTask?.checked;
+    this.updateCurrItem();
   },
 };
 </script>
@@ -426,7 +462,34 @@ export default {
       }
     }
     .task-by-id-page__change-completness-btn {
-      @include default-btn(200px, $color-white, $color-orange);
+      max-width: 200px;
+      width: 100%;
+      padding: 15px;
+      font-family: $font-roboto;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 16px;
+      text-align: center;
+      color: $color-white;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      &:hover {
+        transform: scale(1.05);
+      }
+      &:disabled {
+        transform: none;
+        filter: grayscale(50%);
+      }
+      &_complete {
+        color: $color-green-text;
+        background-color: $color-light-green;
+      }
+      &_incomplete {
+        color: $color-yellow-text;
+        background-color: $color-light-yellow;
+      }
     }
   }
 }
