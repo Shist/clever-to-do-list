@@ -59,6 +59,7 @@
       <div class="task-by-id-page__delete-edit-btns-wrapper">
         <button
           class="task-by-id-page__btn task-by-id-page__btn_delete"
+          @click="deleteModalIsOpen = true"
           :disabled="isEdit"
         ></button>
         <div class="task-by-id-page__gray-divider"></div>
@@ -84,6 +85,18 @@
         Complete
       </button>
     </div>
+    <teleport to="body">
+      <app-modal-confirm
+        :isOpened="deleteModalIsOpen"
+        @confirmed="onDeleteConfirmation"
+        @declined="deleteModalIsOpen = false"
+      >
+        <template v-slot:headline>Deletion confirmation</template>
+        <template v-slot:text
+          >Are you sure you want to delete this task?</template
+        >
+      </app-modal-confirm>
+    </teleport>
   </div>
 </template>
 
@@ -99,6 +112,7 @@ export default {
   data() {
     return {
       currTask: null,
+      deleteModalIsOpen: false,
     };
   },
   methods: {
@@ -111,6 +125,11 @@ export default {
     },
     async onEditSaveBtnClicked() {
       this.setIsEdit(false);
+      // todo server request
+    },
+    async onDeleteConfirmation() {
+      console.log("onDeleteConfirmation");
+      this.deleteModalIsOpen = false;
       // todo server request
     },
   },
