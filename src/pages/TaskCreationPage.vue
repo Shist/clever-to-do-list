@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import { format } from "date-fns";
 import toastMixin from "@/mixins/toastMixin.js";
 import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
 import { mapActions } from "vuex";
@@ -90,12 +91,7 @@ export default {
         });
         this.title = "";
         this.description = "";
-        this.date = new Date()
-          .toISOString()
-          .slice(0, 10)
-          .split(".")
-          .reverse()
-          .join("-");
+        this.date = format(new Date(), "yyyy-MM-dd");
         this.checked = "unchecked";
 
         await this.fetchTasks();

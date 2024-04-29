@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 
-export const taskCreationModule = {
+export const taskEditModule = {
   state: () => ({
     title: "",
     description: "",

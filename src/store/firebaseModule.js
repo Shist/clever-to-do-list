@@ -35,7 +35,7 @@ export const firebaseModule = {
       const date = state.userTasks.find((task) => task.id === id).date;
       return format(
         new Date(date.seconds * 1000 + date.nanoseconds / 1000000),
-        "iii"
+        "eee"
       );
     },
   },

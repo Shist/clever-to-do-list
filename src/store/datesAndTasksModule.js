@@ -22,7 +22,7 @@ export const datesAndTasksModule = {
         const firstDateStr = firstDate.toLocaleDateString();
         const dateInfoObj = {
           date: firstDateStr,
-          weekDay: format(firstDate, "iii"),
+          weekDay: format(firstDate, "eee"),
           uncheckedExist: false,
           checkedExist: false,
           tasksAmount: 0,
