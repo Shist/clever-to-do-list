@@ -77,6 +77,7 @@ export const firebaseModule = {
       await signOut(auth);
       commit("setUserUid", null);
       commit("setUserEmail", null);
+      commit("setUserTasks", null);
     },
     async loadUserTasks({ state, commit }) {
       const db = getFirestore();

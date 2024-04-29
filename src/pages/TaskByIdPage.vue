@@ -99,6 +99,19 @@
       </app-modal-confirm>
     </teleport>
   </div>
+  <div v-else class="task-by-id-alt-page">
+    <h2 v-if="isLoading" class="task-by-id-alt-page__headline-loading">
+      The task is loading...
+    </h2>
+    <div v-else class="task-by-id-alt-page__error-wrapper">
+      <h2 class="task-by-id-alt-page__headline-no-item">
+        No task with the specified id was found.
+      </h2>
+      <router-link to="/" class="task-by-id-alt-page__link-to-main">
+        Back to the main page
+      </router-link>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -233,6 +246,7 @@ export default {
   },
   async mounted() {
     if (!this.userTasks) {
+      this.isLoading = true;
       this.setLoadingToast("Loading tasks...");
       try {
         await this.fetchTasks();
@@ -241,6 +255,8 @@ export default {
         this.setLoadingToast(
           `An error occurred while trying to load tasks! ${error.message}`
         );
+      } finally {
+        this.isLoading = false;
       }
     }
     this.currTask = this.currTaskById(this.$route.params.id);
@@ -411,6 +427,28 @@ export default {
     }
     .task-by-id-page__change-completness-btn {
       @include default-btn(200px, $color-white, $color-orange);
+    }
+  }
+}
+.task-by-id-alt-page {
+  padding: 10px;
+  .task-by-id-alt-page__headline-loading {
+    @include default-headline(48px, 48px, $color-black);
+  }
+  .task-by-id-alt-page__error-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 20px;
+    .task-by-id-alt-page__headline-no-item {
+      @include default-headline(48px, 48px, $color-black);
+    }
+    .task-by-id-alt-page__link-to-main {
+      @include default-text(36px, 36px, $color-black);
+      transition: 0.3s;
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
 }
