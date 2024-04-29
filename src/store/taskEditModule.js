@@ -2,6 +2,7 @@ import { format } from "date-fns";
 
 export const taskEditModule = {
   state: () => ({
+    isEdit: false,
     title: "",
     description: "",
     date: format(new Date(), "yyyy-MM-dd"),
@@ -9,6 +10,9 @@ export const taskEditModule = {
   }),
   getters: {},
   mutations: {
+    setIsEdit(state, isEdit) {
+      state.isEdit = isEdit;
+    },
     setTitle(state, title) {
       state.title = title;
     },

@@ -3,25 +3,36 @@
     <div class="task-by-id-page__back-btn-headline-wrapper">
       <app-left-arrow
         class="task-by-id-page__back-btn"
-        @click="this.$router.push('/')"
+        @click="onBackBtnClicked"
       />
       <h2 class="task-by-id-page__headline">{{ getTaskLabel }}</h2>
     </div>
     <div class="task-by-id-page__task-item">
+      <span class="task-by-id-page__task-status-label">Status:</span>
       <div
         class="task-by-id-page__task-status-circle"
         :class="{ 'task-by-id-page__task-status-circle_checked': checked }"
       ></div>
-      <input
-        v-model="title"
-        type="text"
-        name="edit-title"
-        class="task-by-id-page__task-title"
-        id="editTitleInput"
-        placeholder="Title"
-        required
-      />
     </div>
+    <label class="task-by-id-page__task-title-label" for="editTitleInput">
+      {{ getTitleLabel }}
+    </label>
+    <input
+      v-model="title"
+      type="text"
+      name="edit-title"
+      class="task-by-id-page__task-title"
+      id="editTitleInput"
+      placeholder="Title"
+      required
+      :disabled="!isEdit"
+    />
+    <label
+      class="task-by-id-page__task-description-label"
+      for="editDescriptionTextarea"
+    >
+      {{ getDescriptionLabel }}
+    </label>
     <textarea
       v-model="description"
       type="text"
@@ -30,7 +41,11 @@
       id="editDescriptionTextarea"
       placeholder="Description"
       required
+      :disabled="!isEdit"
     ></textarea>
+    <label class="task-by-id-page__task-date-label" for="editDateInput">
+      {{ getDateLabel }}
+    </label>
     <input
       v-model="date"
       type="date"
@@ -38,16 +53,36 @@
       class="task-by-id-page__task-date"
       id="editDateInput"
       required
+      :disabled="!isEdit"
     />
     <div class="task-by-id-page__bottom-btns-wrapper">
       <div class="task-by-id-page__delete-edit-btns-wrapper">
         <button
           class="task-by-id-page__btn task-by-id-page__btn_delete"
+          :disabled="isEdit"
         ></button>
         <div class="task-by-id-page__gray-divider"></div>
-        <button class="task-by-id-page__btn task-by-id-page__btn_edit"></button>
+        <div class="task-by-id-page__edit-btns-wrapper">
+          <button
+            class="task-by-id-page__btn task-by-id-page__btn_edit"
+            @click="setIsEdit(!isEdit)"
+            :disabled="isEdit"
+          ></button>
+          <button
+            class="task-by-id-page__edit-btn-confirm"
+            @click="onEditSaveBtnClicked"
+            :disabled="!isEdit"
+          >
+            Save
+          </button>
+        </div>
       </div>
-      <button class="task-by-id-page__change-completness-btn">Complete</button>
+      <button
+        class="task-by-id-page__change-completness-btn"
+        :disabled="isEdit"
+      >
+        Complete
+      </button>
     </div>
   </div>
 </template>
@@ -56,7 +91,7 @@
 import { format } from "date-fns";
 import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
 import toastMixin from "@/mixins/toastMixin.js";
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "task-by-id-page",
@@ -66,8 +101,22 @@ export default {
       currTask: null,
     };
   },
+  methods: {
+    ...mapMutations({
+      setIsEdit: "taskEdit/setIsEdit",
+    }),
+    onBackBtnClicked() {
+      this.setIsEdit(false);
+      this.$router.push("/");
+    },
+    async onEditSaveBtnClicked() {
+      this.setIsEdit(false);
+      // todo server request
+    },
+  },
   computed: {
     ...mapState({
+      isEdit: (state) => state.taskEdit.isEdit,
       userTasks: (state) => state.firebase.userTasks,
     }),
     ...mapGetters({
@@ -112,6 +161,15 @@ export default {
         this.$route.params.id
       )} (${this.currWeekDayById(this.$route.params.id)})`;
     },
+    getTitleLabel() {
+      return this.isEdit ? "Edit task title:" : "Task title:";
+    },
+    getDescriptionLabel() {
+      return this.isEdit ? "Edit task description:" : "Task description:";
+    },
+    getDateLabel() {
+      return this.isEdit ? "Edit task date:" : "Task date:";
+    },
   },
   async mounted() {
     if (!this.userTasks) {
@@ -149,8 +207,9 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  row-gap: 20px;
+  align-items: center;
   &__back-btn-headline-wrapper {
+    margin-bottom: 30px;
     display: flex;
     align-items: center;
     column-gap: 10px;
@@ -162,12 +221,15 @@ export default {
     }
   }
   &__task-item {
-    padding: 10px;
+    margin-bottom: 20px;
     max-width: 100%;
     display: flex;
     align-items: center;
     column-gap: 10px;
     border-radius: 10px;
+    .task-by-id-page__task-status-label {
+      @include default-text(24px, 24px, $color-black);
+    }
     .task-by-id-page__task-status-circle {
       height: 30px;
       width: 30px;
@@ -192,30 +254,62 @@ export default {
         }
       }
     }
-    .task-by-id-page__task-title {
-      @extend %default-input;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-wrap: nowrap;
+  }
+  &__task-title-label,
+  &__task-description-label,
+  &__task-date-label {
+    @include default-text(24px, 24px, $color-black);
+    max-width: 500px;
+    width: 100%;
+    @media (max-width: $phone-l) {
+      font-size: 20px;
+      line-height: 20px;
+    }
+  }
+  &__task-title {
+    margin-bottom: 20px;
+    @extend %default-input;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: nowrap;
+    &:disabled {
+      border: none;
     }
   }
   &__task-description {
+    margin-bottom: 20px;
     @extend %default-textarea;
+    &:disabled {
+      border: none;
+    }
   }
   &__task-date {
+    margin-bottom: 20px;
     @extend %default-input;
+    &:disabled {
+      border: none;
+    }
   }
   &__bottom-btns-wrapper {
+    align-self: normal;
     padding: 10px;
     margin-top: auto;
     display: flex;
     justify-content: space-between;
+    column-gap: 20px;
+    @media (max-width: $phone-l) {
+      flex-direction: column;
+      align-items: center;
+      row-gap: 20px;
+    }
     .task-by-id-page__delete-edit-btns-wrapper {
       display: flex;
+      align-items: center;
       column-gap: 20px;
       .task-by-id-page__btn {
         padding: 10px;
         width: 40px;
+        min-width: 40px;
         height: 40px;
         border: none;
         border-radius: 5px;
@@ -225,13 +319,25 @@ export default {
           transform: scale(1.1);
           background-color: $color-very-light-gray;
         }
+        &:disabled {
+          transform: none;
+          background-color: $color-light-gray;
+          filter: grayscale(50%);
+        }
         &_delete {
           background: transparent url("@/assets/icons/trash.svg") no-repeat
             center / 90%;
         }
         &_edit {
-          background: transparent url("@/assets/icons/pen.svg") no-repeat center /
-            90%;
+          background: url("@/assets/icons/pen.svg") no-repeat center / 90%;
+        }
+      }
+      .task-by-id-page__edit-btns-wrapper {
+        display: flex;
+        align-items: center;
+        column-gap: 20px;
+        .task-by-id-page__edit-btn-confirm {
+          @include default-btn(200px, $color-white, $color-orange);
         }
       }
       .task-by-id-page__gray-divider {

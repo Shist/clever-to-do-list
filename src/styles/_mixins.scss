@@ -39,4 +39,8 @@
   &:hover {
     transform: scale(1.05);
   }
+  &:disabled {
+    transform: none;
+    filter: grayscale(50%);
+  }
 }
