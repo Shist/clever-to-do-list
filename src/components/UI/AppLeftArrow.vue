@@ -16,6 +16,7 @@ export default {
 .left-arrow {
   width: 30px;
   height: 30px;
+  border-radius: 5px;
   border: none;
   background: transparent url("@/assets/icons/left-arrow.svg") no-repeat center /
     cover;

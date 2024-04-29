@@ -4,6 +4,7 @@
       <app-left-arrow
         class="task-creation-page__back-btn"
         @click="this.$router.push('/')"
+        :disabled="isLoading"
       />
       <h2 class="task-creation-page__headline">Create new task</h2>
     </div>
@@ -61,6 +62,7 @@
     <button
       class="task-creation-page__confirm-btn"
       @click.prevent="onCreateBtnClicked"
+      :disabled="isLoading"
     >
       Create
     </button>
@@ -77,6 +79,11 @@ import { mapActions } from "vuex";
 export default {
   name: "task-creation-page",
   mixins: [toastMixin, fetchTasksMixin, taskValidationMixin],
+  data() {
+    return {
+      isLoading: false,
+    };
+  },
   methods: {
     ...mapActions({
       uploadNewTask: "firebase/uploadNewTask",
@@ -90,6 +97,7 @@ export default {
         this.setErrorToast(`Error! ${errorMsg}`);
         return;
       }
+      this.isLoading = true;
       this.setLoadingToast("Uploading new task data to DB...");
       try {
         await this.uploadNewTask({
@@ -111,6 +119,8 @@ export default {
         this.setErrorToast(
           `An error occurred while trying to create new task! ${error.message}`
         );
+      } finally {
+        this.isLoading = true;
       }
     },
   },
