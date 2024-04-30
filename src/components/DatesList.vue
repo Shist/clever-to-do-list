@@ -27,6 +27,8 @@ export default {
       setDaysBefore: "datesAndTasks/setDaysBefore",
     }),
     checkDatesScroll() {
+      if (!this.$refs.datesList) return;
+
       const scrLeft = this.$refs.datesList.scrollLeft;
       const scrWidth = this.$refs.datesList.scrollWidth;
       const clWidth = this.$refs.datesList.clientWidth;
