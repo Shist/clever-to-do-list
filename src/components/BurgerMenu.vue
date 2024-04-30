@@ -11,7 +11,7 @@
           <span class="burger-menu__curr-acc-label">Current account:</span>
           <span class="burger-menu__curr-acc-email">{{ userEmail }}</span>
         </div>
-        <h2 class="burger_menu__headline">Menu</h2>
+        <h2 class="burger-menu__headline">Menu</h2>
         <ul class="burger-menu__nav-list">
           <li class="burger-menu__nav-list-item">
             <a class="burger-menu__link" @click.stop="onSignInLinkClicked">
@@ -19,6 +19,22 @@
             </a>
           </li>
         </ul>
+        <div class="burger-menu__git-link-wrapper">
+          <a
+            href="https://github.com/Shist/clever-to-do-list"
+            target="_blank"
+            class="burger-menu__github-link"
+          >
+            <img
+              src="@/assets/icons/github.png"
+              alt="GitHub"
+              class="burger-menu__github-img"
+            />
+            <span class="burger-menu__github-label">
+              This project on GitHub
+            </span>
+          </a>
+        </div>
       </nav>
     </div>
   </teleport>
@@ -91,6 +107,8 @@ export default {
     max-width: 70%;
     width: 100%;
     padding: 30px;
+    display: flex;
+    flex-direction: column;
     background-color: $color-black;
     @media (max-width: $tablet-l) {
       padding: 20px;
@@ -126,12 +144,13 @@ export default {
         }
       }
     }
-    .burger_menu__headline {
+    .burger-menu__headline {
       @include default-headline(48px, 48px, $color-white);
       margin-bottom: 50px;
       text-align: center;
     }
     .burger-menu__nav-list {
+      margin-bottom: 50px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -159,6 +178,39 @@ export default {
           @media (max-width: $phone-l) {
             font-size: 32px;
             line-height: 32px;
+          }
+        }
+      }
+    }
+    .burger-menu__git-link-wrapper {
+      padding: 15px;
+      max-width: 280px;
+      margin: auto auto 0;
+      border: 3px solid $color-white;
+      border-radius: 10px;
+      transition: 0.3s;
+      &:hover {
+        transform: scale(1.1);
+      }
+      &:hover > .burger-menu__github-link > .burger-menu__github-label {
+        color: $color-link-active;
+      }
+      .burger-menu__github-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 5px;
+        text-decoration: none;
+        .burger-menu__github-img {
+          width: 30px;
+          height: 30px;
+        }
+        .burger-menu__github-label {
+          transition: 0.3s;
+          @include default-text(20px, 20px, $color-white);
+          @media (max-width: $tablet-l) {
+            font-size: 16px;
+            line-height: 16px;
           }
         }
       }
