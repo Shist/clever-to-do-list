@@ -64,7 +64,7 @@ export default {
     this.setLoadingToast("Loading tasks...");
     try {
       await this.fetchTasks();
-      this.setSuccessToast("The tasks were successfully loaded!");
+      this.removeCurrToast();
     } catch (error) {
       this.setLoadingToast(
         `An error occurred while trying to load tasks! ${error.message}`

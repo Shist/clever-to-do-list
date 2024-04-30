@@ -182,6 +182,7 @@ export default {
 
         this.setSuccessToast("You have successfully edited the task status!");
         this.setIsEdit(false);
+        this.$router.push("/");
       } catch (error) {
         this.setErrorToast(
           `An error occurred while trying to edit the task status! ${error.message}`
@@ -307,7 +308,7 @@ export default {
       this.setLoadingToast("Loading tasks...");
       try {
         await this.fetchTasks();
-        this.setSuccessToast("The tasks were successfully loaded!");
+        this.removeCurrToast();
       } catch (error) {
         this.setLoadingToast(
           `An error occurred while trying to load tasks! ${error.message}`
