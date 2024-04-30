@@ -14,7 +14,7 @@
         class="dates-list-item__month-day"
         :class="{ 'dates-list-item__month-day_active': isActive }"
       >
-        {{ date.split(".")[0] }}
+        {{ getDayOfDate }}
       </h4>
     </div>
     <div class="dates-list-item__dots-wrapper">
@@ -53,6 +53,17 @@ export default {
     isActive: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    getDayOfDate() {
+      const dateParts = this.date.match(/(\d+)([/.-])(\d+)([/.-])(\d+)/);
+      console.log(dateParts);
+      const date = new Date(dateParts[5], dateParts[3] - 1, dateParts[1]);
+      console.log(date);
+      const day = date.getDate();
+      console.log(day);
+      return day;
     },
   },
 };
