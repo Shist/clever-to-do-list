@@ -11,26 +11,32 @@ const routes = [
   {
     path: "/",
     component: MainPage,
+    meta: { requiresAuth: true },
   },
   {
     path: "/sign-in",
     component: SignInPage,
+    meta: { requiresAuth: false },
   },
   {
     path: "/sign-up",
     component: SignUpPage,
+    meta: { requiresAuth: false },
   },
   {
     path: "/tasks/:id",
     component: TaskByIdPage,
+    meta: { requiresAuth: true },
   },
   {
     path: "/tasks/create-new-task",
     component: TaskCreationPage,
+    meta: { requiresAuth: true },
   },
   {
     path: "/:catchAll(.*)",
     component: NotFoundPage,
+    meta: { requiresAuth: true },
   },
 ];
 
@@ -42,10 +48,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userUid = store.state.firebase.userUid;
 
-  if (to.path === "/sign-in" || to.path === "/sign-up") {
-    userUid ? next("/") : next();
-  } else {
+  if (to.meta.requiresAuth) {
     !userUid ? next("/sign-in") : next();
+  } else {
+    userUid ? next("/") : next();
   }
 });
 
