@@ -98,7 +98,7 @@ export default {
   top: 0;
   left: 0;
   min-width: 100vw;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: flex-end;
   background-color: rgba(0, 0, 0, 0.5);

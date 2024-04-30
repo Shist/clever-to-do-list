@@ -42,7 +42,7 @@ export default {
   padding: 20px;
   position: fixed;
   min-width: 100vw;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
