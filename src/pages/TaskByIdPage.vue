@@ -77,6 +77,13 @@
           >
             Save
           </button>
+          <button
+            class="task-by-id-page__edit-btn-cancel"
+            @click="onEditCancelBtnClicked"
+            :disabled="!isEdit || isLoading"
+          >
+            Cancel
+          </button>
         </div>
       </div>
       <button
@@ -164,6 +171,10 @@ export default {
         "yyyy-MM-dd"
       );
       this.checked = this.currTask?.checked;
+    },
+    onEditCancelBtnClicked() {
+      this.updateCurrItem();
+      this.setIsEdit(false);
     },
     async onCheckedBtnClicked() {
       this.isLoading = true;
@@ -421,15 +432,24 @@ export default {
     display: flex;
     justify-content: space-between;
     column-gap: 20px;
-    @media (max-width: $phone-l) {
+    @media (max-width: $tablet-m) {
       flex-direction: column;
       align-items: center;
       row-gap: 20px;
+    }
+    @media (max-width: $phone-l) {
+      padding: 5px;
     }
     .task-by-id-page__delete-edit-btns-wrapper {
       display: flex;
       align-items: center;
       column-gap: 20px;
+      @media (max-width: $phone-l) {
+        column-gap: 10px;
+      }
+      @media (max-width: $phone-m) {
+        column-gap: 5px;
+      }
       .task-by-id-page__btn {
         padding: 10px;
         width: 40px;
@@ -448,6 +468,11 @@ export default {
           background-color: $color-light-gray;
           filter: grayscale(50%);
         }
+        @media (max-width: $phone-l) {
+          width: 30px;
+          min-width: 30px;
+          height: 30px;
+        }
         &_delete {
           background: transparent url("@/assets/icons/trash.svg") no-repeat
             center / 90%;
@@ -460,8 +485,31 @@ export default {
         display: flex;
         align-items: center;
         column-gap: 20px;
+        @media (max-width: $phone-l) {
+          column-gap: 10px;
+        }
+        @media (max-width: $phone-m) {
+          column-gap: 5px;
+        }
         .task-by-id-page__edit-btn-confirm {
-          @include default-btn(200px, $color-white, $color-orange);
+          @include default-btn(80px, $color-white, $color-orange);
+          min-width: 80px;
+          border: 2px solid $color-orange;
+          @media (max-width: $phone-l) {
+            padding: 10px;
+            font-size: 14px;
+            line-height: 14px;
+          }
+        }
+        .task-by-id-page__edit-btn-cancel {
+          @include default-btn(80px, $color-black, $color-light-yellow);
+          min-width: 80px;
+          border: 2px solid $color-black;
+          @media (max-width: $phone-l) {
+            padding: 10px;
+            font-size: 14px;
+            line-height: 14px;
+          }
         }
       }
       .task-by-id-page__gray-divider {
