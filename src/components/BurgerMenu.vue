@@ -14,7 +14,7 @@
         <h2 class="burger-menu__headline">Menu</h2>
         <ul class="burger-menu__nav-list">
           <li class="burger-menu__nav-list-item">
-            <a class="burger-menu__link" @click.stop="onSignInLinkClicked">
+            <a class="burger-menu__link" @click.stop="onLogOutBtnClicked">
               Log out
             </a>
           </li>
@@ -55,7 +55,7 @@ export default {
     ...mapActions({
       signOutUser: "firebase/signOutUser",
     }),
-    async onSignInLinkClicked() {
+    async onLogOutBtnClicked() {
       try {
         await this.signOutUser();
         this.setMenuIsOpened(false);
