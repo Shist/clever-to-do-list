@@ -19,22 +19,20 @@
             </a>
           </li>
         </ul>
-        <div class="burger-menu__git-link-wrapper">
-          <a
-            href="https://github.com/Shist/clever-to-do-list"
-            target="_blank"
-            class="burger-menu__github-link"
-          >
-            <img
-              src="@/assets/icons/github.png"
-              alt="GitHub"
-              class="burger-menu__github-img"
-            />
-            <span class="burger-menu__github-label">
-              This project on GitHub
-            </span>
-          </a>
-        </div>
+        <a
+          href="https://github.com/Shist/clever-to-do-list"
+          target="_blank"
+          class="burger-menu__github-link"
+        >
+          <img
+            src="@/assets/icons/github.png"
+            alt="GitHub"
+            class="burger-menu__github-img"
+          />
+          <span class="burger-menu__github-label">
+            This project on GitHub
+          </span>
+        </a>
       </nav>
     </div>
   </teleport>
@@ -182,36 +180,39 @@ export default {
         }
       }
     }
-    .burger-menu__git-link-wrapper {
+    .burger-menu__github-link {
       padding: 15px;
-      max-width: 280px;
       margin: auto auto 0;
+      max-width: 280px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      column-gap: 5px;
       border: 3px solid $color-white;
       border-radius: 10px;
+      text-decoration: none;
+      cursor: pointer;
       transition: 0.3s;
       &:hover {
         transform: scale(1.1);
       }
-      &:hover > .burger-menu__github-link > .burger-menu__github-label {
+      &:hover > .burger-menu__github-label {
         color: $color-link-active;
       }
-      .burger-menu__github-link {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        column-gap: 5px;
-        text-decoration: none;
-        .burger-menu__github-img {
-          width: 30px;
-          height: 30px;
-        }
-        .burger-menu__github-label {
-          transition: 0.3s;
-          @include default-text(20px, 20px, $color-white);
-          @media (max-width: $tablet-l) {
-            font-size: 16px;
-            line-height: 16px;
-          }
+      @media (max-width: $phone-l) {
+        padding: 10px;
+        text-align: center;
+      }
+      .burger-menu__github-img {
+        width: 30px;
+        height: 30px;
+      }
+      .burger-menu__github-label {
+        transition: 0.3s;
+        @include default-text(20px, 20px, $color-white);
+        @media (max-width: $tablet-l) {
+          font-size: 16px;
+          line-height: 16px;
         }
       }
     }
