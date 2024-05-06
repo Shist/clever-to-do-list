@@ -1,5 +1,5 @@
 <template>
-  <div v-if="currTask" class="task-by-id-page">
+  <div v-if="currUserTask" class="task-by-id-page">
     <div class="task-by-id-page__back-btn-headline-wrapper">
       <app-left-arrow
         class="task-by-id-page__back-btn"
@@ -92,12 +92,12 @@
         :disabled="isEdit || isLoading"
         :class="{
           'task-by-id-page__change-completness-btn_complete':
-            !currTask?.checked,
+            !currUserTask?.checked,
           'task-by-id-page__change-completness-btn_incomplete':
-            currTask?.checked,
+            currUserTask?.checked,
         }"
       >
-        {{ currTask?.checked ? "Incomplete" : "Complete" }}
+        {{ currUserTask?.checked ? "Incomplete" : "Complete" }}
       </button>
     </div>
     <teleport to="body">
@@ -134,14 +134,17 @@ import toastMixin from "@/mixins/toastMixin.js";
 import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
 import taskValidationMixin from "@/mixins/taskValidationMixin.js";
 import { mapState } from "vuex";
-import { changeExistingTask, deleteExistingTask } from "@/services/firebase";
+import {
+  loadUserTaskById,
+  changeExistingTask,
+  deleteExistingTask,
+} from "@/services/firebase";
 
 export default {
   name: "task-by-id-page",
   mixins: [fetchTasksMixin, toastMixin, taskValidationMixin],
   data() {
     return {
-      currTask: null,
       deleteModalIsOpen: false,
       isLoading: false,
       isEdit: false,
@@ -152,11 +155,8 @@ export default {
     };
   },
   methods: {
-    currTaskById(id) {
-      return this.userTasks.find((task) => task.id === id);
-    },
-    currDateById(id) {
-      const date = this.userTasks.find((task) => task.id === id)?.date;
+    getCurrDate() {
+      const date = this.currUserTask?.date;
       if (date) {
         return new Date(
           date.seconds * 1000 + date.nanoseconds / 1000000
@@ -165,8 +165,8 @@ export default {
         new Date().toLocaleDateString();
       }
     },
-    currWeekDayById(id) {
-      const date = this.userTasks.find((task) => task.id === id)?.date;
+    getCurrWeekDay() {
+      const date = this.currUserTask?.date;
       if (date) {
         return format(
           new Date(date.seconds * 1000 + date.nanoseconds / 1000000),
@@ -181,19 +181,18 @@ export default {
       this.$router.push("/");
     },
     updateCurrItem() {
-      this.currTask = this.currTaskById(this.$route.params.id);
-      this.title = this.currTask?.title;
-      this.description = this.currTask?.description;
+      this.title = this.currUserTask?.title;
+      this.description = this.currUserTask?.description;
       this.date = format(
         new Date(
-          this.currTask
-            ? this.currTask.date.seconds * 1000 +
-              this.currTask.date.nanoseconds / 1000000
+          this.currUserTask
+            ? this.currUserTask.date.seconds * 1000 +
+              this.currUserTask.date.nanoseconds / 1000000
             : null
         ),
         "yyyy-MM-dd"
       );
-      this.checked = this.currTask?.checked;
+      this.checked = this.currUserTask?.checked;
     },
     onEditCancelBtnClicked() {
       this.updateCurrItem();
@@ -270,7 +269,6 @@ export default {
         this.setSuccessToast("You have successfully deleted the task!");
         this.$router.push("/");
       } catch (error) {
-        console.error(error.message);
         this.setErrorToast(
           `An error occurred while trying to delete the task! ${error.message}`
         );
@@ -281,12 +279,10 @@ export default {
   },
   computed: {
     ...mapState({
-      userTasks: (state) => state.userData.userTasks,
+      currUserTask: (state) => state.userData.currUserTask,
     }),
     getTaskLabel() {
-      return `Task for ${this.currDateById(
-        this.$route.params.id
-      )} (${this.currWeekDayById(this.$route.params.id)})`;
+      return `Task for ${this.getCurrDate()} (${this.getCurrWeekDay()})`;
     },
     getTitleLabel() {
       return this.isEdit ? "Edit task title:" : "Task title:";
@@ -299,15 +295,15 @@ export default {
     },
   },
   async mounted() {
-    if (!this.userTasks) {
+    if (!this.currUserTask) {
       this.isLoading = true;
-      this.setLoadingToast("Loading tasks...");
+      this.setLoadingToast("Loading task...");
       try {
-        await this.fetchTasks();
+        await loadUserTaskById(this.$route.params.id);
         this.removeCurrToast();
       } catch (error) {
-        this.setLoadingToast(
-          `An error occurred while trying to load tasks! ${error.message}`
+        this.setErrorToast(
+          `An error occurred while trying to load the task! ${error.message}`
         );
       } finally {
         this.isLoading = false;

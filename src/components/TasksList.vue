@@ -4,21 +4,32 @@
       v-for="task in currTasksList"
       :task="task"
       :key="task.id"
-      @click="this.$router.push(`/tasks/${task.id}`)"
+      @click="onTaskItemClicked(task)"
     />
   </ul>
 </template>
 
 <script>
 import TasksListItem from "@/components/TasksListItem";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "tasks-list",
   components: { TasksListItem },
+  methods: {
+    ...mapMutations({
+      setCurrUserTask: "userData/setCurrUserTask",
+    }),
+    onTaskItemClicked(task) {
+      task.date = this.getTimeStampByTaskId(task.id);
+      this.setCurrUserTask(task);
+      this.$router.push(`/tasks/${task.id}`);
+    },
+  },
   computed: {
     ...mapGetters({
       currTasksList: "datesAndTasks/currTasksList",
+      getTimeStampByTaskId: "userData/getTimeStampByTaskId",
     }),
   },
 };

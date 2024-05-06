@@ -10,6 +10,7 @@ import {
   getFirestore,
   doc,
   collection,
+  getDoc,
   getDocs,
   addDoc,
   setDoc,
@@ -71,6 +72,22 @@ async function loadUserTasks() {
   store.commit("userData/setUserTasks", tasksList);
 }
 
+async function loadUserTaskById(taskId) {
+  const db = getFirestore();
+  const userTaskDoc = doc(
+    db,
+    "users",
+    store.state.userData.userUid,
+    "tasks",
+    taskId
+  );
+  const docSnapshot = await getDoc(userTaskDoc);
+  store.commit("userData/setCurrUserTask", {
+    id: docSnapshot.id,
+    ...docSnapshot.data(),
+  });
+}
+
 async function uploadNewTask(taskData) {
   taskData.date = new Date(taskData.date);
   const db = getFirestore();
@@ -119,6 +136,7 @@ export {
   signInUser,
   signOutUser,
   loadUserTasks,
+  loadUserTaskById,
   uploadNewTask,
   changeExistingTask,
   deleteExistingTask,

@@ -3,8 +3,13 @@ export const userDataModule = {
     userUid: null,
     userEmail: null,
     userTasks: null,
+    currUserTask: null,
   }),
-  getters: {},
+  getters: {
+    getTimeStampByTaskId: (state) => (taskId) => {
+      return state.userTasks.find((task) => task.id === taskId)?.date;
+    },
+  },
   mutations: {
     setUserUid(state, userUid) {
       state.userUid = userUid;
@@ -14,6 +19,9 @@ export const userDataModule = {
     },
     setUserTasks(state, userTasks) {
       state.userTasks = userTasks;
+    },
+    setCurrUserTask(state, currUserTask) {
+      state.currUserTask = currUserTask;
     },
   },
   actions: {},
