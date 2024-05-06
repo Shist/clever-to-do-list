@@ -1,5 +1,4 @@
 import { createStore } from "vuex";
-import { burgerMenuModule } from "@/store/burgerMenuModule";
 import { firebaseModule } from "@/store/firebaseModule";
 import { signInModule } from "@/store/signInModule";
 import { signUpModule } from "@/store/signUpModule";
@@ -14,7 +13,6 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {
-    burgerMenu: burgerMenuModule,
     firebase: firebaseModule,
     signIn: signInModule,
     signUp: signUpModule,

@@ -1,10 +1,10 @@
 <template>
-  <button class="burger-btn" @click="setMenuIsOpened(true)"></button>
+  <button class="burger-btn" @click="menuIsOpened = true"></button>
   <teleport to=".global-container">
     <div
       v-show="menuIsOpened"
       class="burger-menu"
-      @click="setMenuIsOpened($event.target.className !== 'burger-menu')"
+      @click="menuIsOpened = $event.target.className !== 'burger-menu'"
     >
       <nav class="burger-menu__nav">
         <div class="burger-menu__curr-acc-wrapper">
@@ -41,22 +41,24 @@
 <script>
 import toastMixin from "@/mixins/toastMixin.js";
 import errorMsgMixin from "@/mixins/errorMsgMixin.js";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "burger-menu",
   mixins: [toastMixin, errorMsgMixin],
+  data() {
+    return {
+      menuIsOpened: false,
+    };
+  },
   methods: {
-    ...mapMutations({
-      setMenuIsOpened: "burgerMenu/setMenuIsOpened",
-    }),
     ...mapActions({
       signOutUser: "firebase/signOutUser",
     }),
     async onLogOutBtnClicked() {
       try {
         await this.signOutUser();
-        this.setMenuIsOpened(false);
+        this.menuIsOpened = false;
         this.$router.push("/sign-in");
       } catch (error) {
         const errorMsg = this.getErrorMsg(error);
@@ -68,7 +70,6 @@ export default {
   },
   computed: {
     ...mapState({
-      menuIsOpened: (state) => state.burgerMenu.menuIsOpened,
       userEmail: (state) => state.firebase.userEmail,
     }),
   },
