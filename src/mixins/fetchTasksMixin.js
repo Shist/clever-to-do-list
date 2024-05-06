@@ -1,15 +1,13 @@
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapMutations } from "vuex";
+import { loadUserTasks } from "@/services/firebase";
 
 export default {
   methods: {
     ...mapMutations({
       setDatesTaskData: "datesAndTasks/setDatesTaskData",
     }),
-    ...mapActions({
-      loadUserTasks: "firebase/loadUserTasks",
-    }),
     async fetchTasks() {
-      await this.loadUserTasks();
+      await loadUserTasks();
 
       const datesInfoObj = {};
 
@@ -35,7 +33,7 @@ export default {
   },
   computed: {
     ...mapState({
-      userTasks: (state) => state.firebase.userTasks,
+      userTasks: (state) => state.userData.userTasks,
     }),
   },
 };

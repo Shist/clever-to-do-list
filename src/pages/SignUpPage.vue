@@ -65,7 +65,8 @@
 <script>
 import toastMixin from "@/mixins/toastMixin";
 import errorMsgMixin from "@/mixins/errorMsgMixin.js";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
+import { signUpUser } from "@/services/firebase";
 
 export default {
   name: "sign-up-page",
@@ -80,9 +81,6 @@ export default {
       setEmail: "signUp/setEmail",
       setPassword: "signUp/setPassword",
       setRepeatPassword: "signUp/setRepeatPassword",
-    }),
-    ...mapActions({
-      signUpUser: "firebase/signUpUser",
     }),
     getValidationError() {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -112,7 +110,7 @@ export default {
       this.isLoading = true;
       this.setLoadingToast("Registering an account...");
       try {
-        await this.signUpUser({ email: this.email, password: this.password });
+        await signUpUser(this.email, this.password);
         this.setSuccessToast("Your account has been successfully registered!");
         this.email = "";
         this.password = "";

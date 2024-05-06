@@ -50,7 +50,8 @@
 <script>
 import toastMixin from "@/mixins/toastMixin.js";
 import errorMsgMixin from "@/mixins/errorMsgMixin.js";
-import { mapState, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
+import { signInUser } from "@/services/firebase";
 
 export default {
   name: "sign-in-page",
@@ -65,14 +66,11 @@ export default {
       setEmail: "signIn/setEmail",
       setPassword: "signIn/setPassword",
     }),
-    ...mapActions({
-      signInUser: "firebase/signInUser",
-    }),
     async onConfirmBtnClicked() {
       this.isLoading = true;
       this.setLoadingToast("Logging...");
       try {
-        await this.signInUser({ email: this.email, password: this.password });
+        await signInUser(this.email, this.password);
         this.setSuccessToast("You have successfully logged in!");
         this.email = "";
         this.password = "";

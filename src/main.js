@@ -24,6 +24,6 @@ onFirebaseAuthStateChanged((user) => {
       .mount("#app");
   }
 
-  store.commit("firebase/setUserUid", user ? user.uid : null);
-  store.commit("firebase/setUserEmail", user ? user.email : null);
+  store.commit("userData/setUserUid", user ? user.uid : null);
+  store.commit("userData/setUserEmail", user ? user.email : null);
 });

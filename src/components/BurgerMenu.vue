@@ -41,7 +41,8 @@
 <script>
 import toastMixin from "@/mixins/toastMixin.js";
 import errorMsgMixin from "@/mixins/errorMsgMixin.js";
-import { mapState, mapActions } from "vuex";
+import { mapState } from "vuex";
+import { signOutUser } from "@/services/firebase";
 
 export default {
   name: "burger-menu",
@@ -52,12 +53,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions({
-      signOutUser: "firebase/signOutUser",
-    }),
     async onLogOutBtnClicked() {
       try {
-        await this.signOutUser();
+        await signOutUser();
         this.menuIsOpened = false;
         this.$router.push("/sign-in");
       } catch (error) {
@@ -70,7 +68,7 @@ export default {
   },
   computed: {
     ...mapState({
-      userEmail: (state) => state.firebase.userEmail,
+      userEmail: (state) => state.userData.userEmail,
     }),
   },
 };

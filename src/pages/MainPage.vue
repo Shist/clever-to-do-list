@@ -40,7 +40,7 @@ export default {
   components: { BurgerMenu, DatesList, TasksList },
   computed: {
     ...mapState({
-      userTasks: (state) => state.firebase.userTasks,
+      userTasks: (state) => state.userData.userTasks,
     }),
     ...mapGetters({
       currDate: "datesAndTasks/currDate",

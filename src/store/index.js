@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { firebaseModule } from "@/store/firebaseModule";
+import { userDataModule } from "@/store/userDataModule";
 import { signInModule } from "@/store/signInModule";
 import { signUpModule } from "@/store/signUpModule";
 import { datesAndTasksModule } from "@/store/datesAndTasksModule";
@@ -13,7 +13,7 @@ export default createStore({
   mutations: {},
   actions: {},
   modules: {
-    firebase: firebaseModule,
+    userData: userDataModule,
     signIn: signInModule,
     signUp: signUpModule,
     datesAndTasks: datesAndTasksModule,

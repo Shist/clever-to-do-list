@@ -133,7 +133,8 @@ import { format } from "date-fns";
 import toastMixin from "@/mixins/toastMixin.js";
 import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
 import taskValidationMixin from "@/mixins/taskValidationMixin.js";
-import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
+import { mapState, mapMutations } from "vuex";
+import { changeExistingTask, deleteExistingTask } from "@/services/firebase";
 
 export default {
   name: "task-by-id-page",
@@ -149,10 +150,30 @@ export default {
     ...mapMutations({
       setIsEdit: "taskEdit/setIsEdit",
     }),
-    ...mapActions({
-      changeExistingTask: "firebase/changeExistingTask",
-      deleteExistingTask: "firebase/deleteExistingTask",
-    }),
+    currTaskById(id) {
+      return this.userTasks.find((task) => task.id === id);
+    },
+    currDateById(id) {
+      const date = this.userTasks.find((task) => task.id === id)?.date;
+      if (date) {
+        return new Date(
+          date.seconds * 1000 + date.nanoseconds / 1000000
+        ).toLocaleDateString();
+      } else {
+        new Date().toLocaleDateString();
+      }
+    },
+    currWeekDayById(id) {
+      const date = this.userTasks.find((task) => task.id === id)?.date;
+      if (date) {
+        return format(
+          new Date(date.seconds * 1000 + date.nanoseconds / 1000000),
+          "eee"
+        );
+      } else {
+        return format(new Date(), "eee");
+      }
+    },
     onBackBtnClicked() {
       this.setIsEdit(false);
       this.$router.push("/");
@@ -180,7 +201,7 @@ export default {
       this.isLoading = true;
       this.setLoadingToast("Uploading task status to DB...");
       try {
-        await this.changeExistingTask({
+        await changeExistingTask({
           id: this.$route.params.id,
           title: this.title,
           description: this.description,
@@ -214,7 +235,7 @@ export default {
       this.isLoading = true;
       this.setLoadingToast("Uploading task data changes to DB...");
       try {
-        await this.changeExistingTask({
+        await changeExistingTask({
           id: this.$route.params.id,
           title: this.title,
           description: this.description,
@@ -240,7 +261,7 @@ export default {
       this.deleteModalIsOpen = false;
       this.setLoadingToast("Deleting task in DB...");
       try {
-        await this.deleteExistingTask(this.$route.params.id);
+        await deleteExistingTask(this.$route.params.id);
 
         await this.fetchTasks();
 
@@ -259,12 +280,7 @@ export default {
   computed: {
     ...mapState({
       isEdit: (state) => state.taskEdit.isEdit,
-      userTasks: (state) => state.firebase.userTasks,
-    }),
-    ...mapGetters({
-      currTaskById: "firebase/currTaskById",
-      currDateById: "firebase/currDateById",
-      currWeekDayById: "firebase/currWeekDayById",
+      userTasks: (state) => state.userData.userTasks,
     }),
     title: {
       get() {
