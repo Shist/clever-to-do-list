@@ -1,7 +1,5 @@
 <template>
-  <button class="left-arrow">
-    <slot></slot>
-  </button>
+  <button class="left-arrow"></button>
 </template>
 
 <script>
