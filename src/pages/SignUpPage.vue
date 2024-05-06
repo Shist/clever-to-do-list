@@ -65,7 +65,7 @@
 <script>
 import toastMixin from "@/mixins/toastMixin";
 import errorMsgMixin from "@/mixins/errorMsgMixin.js";
-import { mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "sign-up-page",
@@ -76,6 +76,11 @@ export default {
     };
   },
   methods: {
+    ...mapMutations({
+      setEmail: "signUp/setEmail",
+      setPassword: "signUp/setPassword",
+      setRepeatPassword: "signUp/setRepeatPassword",
+    }),
     ...mapActions({
       signUpUser: "firebase/signUpUser",
     }),
@@ -124,28 +129,33 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      emailState: (state) => state.signUp.email,
+      passwordState: (state) => state.signUp.password,
+      repeatPasswordState: (state) => state.signUp.repeatPassword,
+    }),
     email: {
       get() {
-        return this.$store.state.signUp.email;
+        return this.emailState;
       },
       set(newValue) {
-        this.$store.commit("signUp/setEmail", newValue);
+        this.setEmail(newValue);
       },
     },
     password: {
       get() {
-        return this.$store.state.signUp.password;
+        return this.passwordState;
       },
       set(newValue) {
-        this.$store.commit("signUp/setPassword", newValue);
+        this.setPassword(newValue);
       },
     },
     repeatPassword: {
       get() {
-        return this.$store.state.signUp.repeatPassword;
+        return this.repeatPasswordState;
       },
       set(newValue) {
-        this.$store.commit("signUp/setRepeatPassword", newValue);
+        this.setRepeatPassword(newValue);
       },
     },
   },

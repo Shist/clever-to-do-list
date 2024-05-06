@@ -50,7 +50,7 @@
 <script>
 import toastMixin from "@/mixins/toastMixin.js";
 import errorMsgMixin from "@/mixins/errorMsgMixin.js";
-import { mapActions } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "sign-in-page",
@@ -61,6 +61,10 @@ export default {
     };
   },
   methods: {
+    ...mapMutations({
+      setEmail: "signIn/setEmail",
+      setPassword: "signIn/setPassword",
+    }),
     ...mapActions({
       signInUser: "firebase/signInUser",
     }),
@@ -84,20 +88,24 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      emailState: (state) => state.signIn.email,
+      passwordState: (state) => state.signIn.password,
+    }),
     email: {
       get() {
-        return this.$store.state.signIn.email;
+        return this.emailState;
       },
       set(newValue) {
-        this.$store.commit("signIn/setEmail", newValue);
+        this.setEmail(newValue);
       },
     },
     password: {
       get() {
-        return this.$store.state.signIn.password;
+        return this.passwordState;
       },
       set(newValue) {
-        this.$store.commit("signIn/setPassword", newValue);
+        this.setPassword(newValue);
       },
     },
   },
