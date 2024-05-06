@@ -15,17 +15,23 @@ import { mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "tasks-list",
+
   components: { TasksListItem },
+
   methods: {
     ...mapMutations({
       setCurrUserTask: "userData/setCurrUserTask",
     }),
+
     onTaskItemClicked(task) {
       task.date = this.getTimeStampByTaskId(task.id);
+
       this.setCurrUserTask(task);
+
       this.$router.push(`/tasks/${task.id}`);
     },
   },
+
   computed: {
     ...mapGetters({
       currTasksList: "datesAndTasks/currTasksList",

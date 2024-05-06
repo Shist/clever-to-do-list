@@ -19,12 +19,14 @@
 <script>
 export default {
   name: "app-modal-confirm",
+
   props: {
     isOpened: {
       type: Boolean,
       default: false,
     },
   },
+
   methods: {
     onModalClicked(event) {
       if (event.target.className === "modal") {

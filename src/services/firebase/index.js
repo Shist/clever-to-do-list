@@ -37,20 +37,25 @@ function onFirebaseAuthStateChanged(initFoo) {
 
 async function signUpUser(email, password) {
   const auth = getAuth();
+
   await createUserWithEmailAndPassword(auth, email, password);
 
   const db = getFirestore();
+
   await setDoc(doc(db, "users", store.state.userData.userUid), {});
 }
 
 async function signInUser(email, password) {
   const auth = getAuth();
+
   await signInWithEmailAndPassword(auth, email, password);
 }
 
 async function signOutUser() {
   const auth = getAuth();
+
   await signOut(auth);
+
   store.commit("userData/setUserUid", null);
   store.commit("userData/setUserEmail", null);
   store.commit("userData/setUserTasks", null);
@@ -58,22 +63,28 @@ async function signOutUser() {
 
 async function loadUserTasks() {
   const db = getFirestore();
+
   const userTasksCollection = collection(
     db,
     "users",
     store.state.userData.userUid,
     "tasks"
   );
+
   const docsSnapshot = await getDocs(userTasksCollection);
+
   const tasksList = [];
+
   docsSnapshot.forEach((doc) => {
     tasksList.push({ id: doc.id, ...doc.data() });
   });
+
   store.commit("userData/setUserTasks", tasksList);
 }
 
 async function loadUserTaskById(taskId) {
   const db = getFirestore();
+
   const userTaskDoc = doc(
     db,
     "users",
@@ -81,7 +92,9 @@ async function loadUserTaskById(taskId) {
     "tasks",
     taskId
   );
+
   const docSnapshot = await getDoc(userTaskDoc);
+
   store.commit("userData/setCurrUserTask", {
     id: docSnapshot.id,
     ...docSnapshot.data(),
@@ -90,19 +103,24 @@ async function loadUserTaskById(taskId) {
 
 async function uploadNewTask(taskData) {
   taskData.date = new Date(taskData.date);
+
   const db = getFirestore();
+
   const userTasksCollection = collection(
     db,
     "users",
     store.state.userData.userUid,
     "tasks"
   );
+
   await addDoc(userTasksCollection, taskData);
 }
 
 async function changeExistingTask(taskData) {
   taskData.date = new Date(taskData.date);
+
   const db = getFirestore();
+
   const userTaskDoc = doc(
     db,
     "users",
@@ -110,6 +128,7 @@ async function changeExistingTask(taskData) {
     "tasks",
     taskData.id
   );
+
   await updateDoc(userTaskDoc, {
     title: taskData.title,
     description: taskData.description,
@@ -120,6 +139,7 @@ async function changeExistingTask(taskData) {
 
 async function deleteExistingTask(taskId) {
   const db = getFirestore();
+
   const userTaskDoc = doc(
     db,
     "users",
@@ -127,6 +147,7 @@ async function deleteExistingTask(taskId) {
     "tasks",
     taskId
   );
+
   await deleteDoc(userTaskDoc);
 }
 

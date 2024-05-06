@@ -11,6 +11,7 @@
 <script>
 export default {
   name: "tasks-list-item",
+
   props: {
     task: {
       type: Object,

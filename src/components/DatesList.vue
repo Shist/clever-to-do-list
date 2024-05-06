@@ -19,13 +19,16 @@ import { mapState, mapGetters, mapMutations } from "vuex";
 
 export default {
   name: "dates-list",
+
   components: { DatesListItem },
+
   methods: {
     ...mapMutations({
       setCurrDateIndex: "datesAndTasks/setCurrDateIndex",
       setDaysAfter: "datesAndTasks/setDaysAfter",
       setDaysBefore: "datesAndTasks/setDaysBefore",
     }),
+
     checkDatesScroll() {
       if (!this.$refs.datesList) return;
 
@@ -38,20 +41,24 @@ export default {
       } else if (scrLeft < 50) {
         this.setDaysBefore(this.daysBefore + 15);
         this.setCurrDateIndex(this.currDateIndex + 15);
+
         this.$refs.datesList.scrollLeft = 900;
       }
     },
   },
+
   computed: {
     ...mapState({
       currDateIndex: (state) => state.datesAndTasks.currDateIndex,
       daysAfter: (state) => state.datesAndTasks.daysAfter,
       daysBefore: (state) => state.datesAndTasks.daysBefore,
     }),
+
     ...mapGetters({
       currentDates: "datesAndTasks/currentDates",
     }),
   },
+
   mounted() {
     this.$refs.datesList.scrollLeft = 900;
   },

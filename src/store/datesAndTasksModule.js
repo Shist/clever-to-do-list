@@ -7,6 +7,7 @@ export const datesAndTasksModule = {
     daysBefore: 15,
     datesTaskData: {},
   }),
+
   getters: {
     currentDates(state) {
       const currDate = new Date();
@@ -20,6 +21,7 @@ export const datesAndTasksModule = {
 
       while (firstDate <= lastDate) {
         const firstDateStr = firstDate.toLocaleDateString();
+
         const dateInfoObj = {
           date: firstDateStr,
           weekDay: format(firstDate, "eee"),
@@ -27,16 +29,21 @@ export const datesAndTasksModule = {
           checkedExist: false,
           tasksAmount: 0,
         };
+
         if (firstDateStr in state.datesTaskData) {
           dateInfoObj.uncheckedExist = state.datesTaskData[firstDateStr].some(
             (task) => !task.checked
           );
+
           dateInfoObj.checkedExist = state.datesTaskData[firstDateStr].some(
             (task) => task.checked
           );
+
           dateInfoObj.tasksAmount = state.datesTaskData[firstDateStr].length;
         }
+
         datesArr.push(dateInfoObj);
+
         firstDate.setDate(firstDate.getDate() + 1);
       }
 
@@ -55,6 +62,7 @@ export const datesAndTasksModule = {
       return state.datesTaskData[getters.currDate];
     },
   },
+
   mutations: {
     setCurrDateIndex(state, currDateIndex) {
       state.currDateIndex = currDateIndex;
@@ -69,6 +77,8 @@ export const datesAndTasksModule = {
       state.datesTaskData = datesTaskData;
     },
   },
+
   actions: {},
+
   namespaced: true,
 };

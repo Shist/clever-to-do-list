@@ -33,6 +33,7 @@
 <script>
 export default {
   name: "dates-list-item",
+
   props: {
     date: {
       type: String,
@@ -55,11 +56,15 @@ export default {
       default: false,
     },
   },
+
   computed: {
     getDayOfDate() {
       const dateParts = this.date.match(/(\d+)([/.-])(\d+)([/.-])(\d+)/);
+
       const date = new Date(dateParts[5], dateParts[3] - 1, dateParts[1]);
+
       const day = date.getDate();
+
       return day;
     },
   },

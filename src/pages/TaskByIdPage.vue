@@ -142,7 +142,9 @@ import {
 
 export default {
   name: "task-by-id-page",
+
   mixins: [fetchTasksMixin, toastMixin, taskValidationMixin],
+
   data() {
     return {
       deleteModalIsOpen: false,
@@ -154,9 +156,11 @@ export default {
       checked: "unchecked",
     };
   },
+
   methods: {
     getCurrDate() {
       const date = this.currUserTask?.date;
+
       if (date) {
         return new Date(
           date.seconds * 1000 + date.nanoseconds / 1000000
@@ -165,8 +169,10 @@ export default {
         new Date().toLocaleDateString();
       }
     },
+
     getCurrWeekDay() {
       const date = this.currUserTask?.date;
+
       if (date) {
         return format(
           new Date(date.seconds * 1000 + date.nanoseconds / 1000000),
@@ -176,10 +182,13 @@ export default {
         return format(new Date(), "eee");
       }
     },
+
     onBackBtnClicked() {
       this.isEdit = false;
+
       this.$router.push("/");
     },
+
     updateCurrItem() {
       this.title = this.currUserTask?.title;
       this.description = this.currUserTask?.description;
@@ -194,10 +203,13 @@ export default {
       );
       this.checked = this.currUserTask?.checked;
     },
+
     onEditCancelBtnClicked() {
       this.updateCurrItem();
+
       this.isEdit = false;
     },
+
     async onCheckedBtnClicked() {
       this.isLoading = true;
       this.setLoadingToast("Uploading task status to DB...");
@@ -211,10 +223,13 @@ export default {
         });
 
         await this.fetchTasks();
+
         this.updateCurrItem();
 
         this.setSuccessToast("You have successfully edited the task status!");
+
         this.isEdit = false;
+
         this.$router.push("/");
       } catch (error) {
         this.setErrorToast(
@@ -229,10 +244,12 @@ export default {
         this.title,
         this.description
       );
+
       if (errorMsg) {
         this.setErrorToast(`Error! ${errorMsg}`);
         return;
       }
+
       this.isLoading = true;
       this.setLoadingToast("Uploading task data changes to DB...");
       try {
@@ -245,9 +262,11 @@ export default {
         });
 
         await this.fetchTasks();
+
         this.updateCurrItem();
 
         this.setSuccessToast("You have successfully edited the task!");
+
         this.isEdit = false;
       } catch (error) {
         this.setErrorToast(
@@ -267,6 +286,7 @@ export default {
         await this.fetchTasks();
 
         this.setSuccessToast("You have successfully deleted the task!");
+
         this.$router.push("/");
       } catch (error) {
         this.setErrorToast(
@@ -300,6 +320,7 @@ export default {
       this.setLoadingToast("Loading task...");
       try {
         await loadUserTaskById(this.$route.params.id);
+
         this.removeCurrToast();
       } catch (error) {
         this.setErrorToast(

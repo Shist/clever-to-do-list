@@ -78,7 +78,9 @@ import { uploadNewTask } from "@/services/firebase";
 
 export default {
   name: "task-creation-page",
+
   mixins: [toastMixin, fetchTasksMixin, taskValidationMixin],
+
   data() {
     return {
       isLoading: false,
@@ -88,16 +90,19 @@ export default {
       checked: "unchecked",
     };
   },
+
   methods: {
     async onCreateBtnClicked() {
       const errorMsg = this.getTaskValidationError(
         this.title,
         this.description
       );
+
       if (errorMsg) {
         this.setErrorToast(`Error! ${errorMsg}`);
         return;
       }
+
       this.isLoading = true;
       this.setLoadingToast("Uploading new task data to DB...");
       try {
@@ -107,6 +112,7 @@ export default {
           date: this.date,
           checked: this.checked === "checked",
         });
+
         this.title = "";
         this.description = "";
         this.date = format(new Date(), "yyyy-MM-dd");
@@ -115,6 +121,7 @@ export default {
         await this.fetchTasks();
 
         this.setSuccessToast("You have successfully created new task!");
+
         this.$router.push("/");
       } catch (error) {
         this.setErrorToast(

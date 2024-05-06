@@ -15,14 +15,10 @@ module.exports = {
     },
   },
   rules: {
+    "prettier/prettier": "error",
     "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "prettier/prettier": [
-      "error",
-      {
-        endOfLine: "auto",
-      },
-    ],
     "css.lint.unknownAtRules": 0,
+    "linebreak-style": 0,
   },
 };

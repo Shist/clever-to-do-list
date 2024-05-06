@@ -36,17 +36,22 @@ import { mapState, mapGetters } from "vuex";
 
 export default {
   name: "main-page",
+
   mixins: [fetchTasksMixin, toastMixin],
+
   components: { BurgerMenu, DatesList, TasksList },
+
   computed: {
     ...mapState({
       userTasks: (state) => state.userData.userTasks,
     }),
+
     ...mapGetters({
       currDate: "datesAndTasks/currDate",
       currWeekDay: "datesAndTasks/currWeekDay",
       currDateTasksAmount: "datesAndTasks/currDateTasksAmount",
     }),
+
     getTasksListLabel() {
       if (this.currDateTasksAmount > 1) {
         return `${this.currDateTasksAmount} tasks for ${this.currDate} (${this.currWeekDay})`;
@@ -57,13 +62,16 @@ export default {
       }
     },
   },
+
   async mounted() {
     if (this.userTasks) {
       return;
     }
+
     this.setLoadingToast("Loading tasks...");
     try {
       await this.fetchTasks();
+
       this.removeCurrToast();
     } catch (error) {
       this.setErrorToast(

@@ -6,6 +6,7 @@ export default {
     ...mapMutations({
       setDatesTaskData: "datesAndTasks/setDatesTaskData",
     }),
+
     async fetchTasks() {
       await loadUserTasks();
 
@@ -31,6 +32,7 @@ export default {
       this.setDatesTaskData(datesInfoObj);
     },
   },
+
   computed: {
     ...mapState({
       userTasks: (state) => state.userData.userTasks,

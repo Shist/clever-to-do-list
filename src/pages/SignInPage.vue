@@ -54,7 +54,9 @@ import { signInUser } from "@/services/firebase";
 
 export default {
   name: "sign-in-page",
+
   mixins: [toastMixin, errorMsgMixin],
+
   data() {
     return {
       isLoading: false,
@@ -62,18 +64,23 @@ export default {
       password: "",
     };
   },
+
   methods: {
     async onConfirmBtnClicked() {
       this.isLoading = true;
       this.setLoadingToast("Logging...");
       try {
         await signInUser(this.email, this.password);
+
         this.setSuccessToast("You have successfully logged in!");
+
         this.email = "";
         this.password = "";
+
         this.$router.push("/");
       } catch (error) {
         const errorMsg = this.getErrorMsg(error);
+
         this.setErrorToast(
           `An error occurred while trying to log in to account! ${errorMsg}`
         );

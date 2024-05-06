@@ -69,7 +69,9 @@ import { signUpUser } from "@/services/firebase";
 
 export default {
   name: "sign-up-page",
+
   mixins: [toastMixin, errorMsgMixin],
+
   data() {
     return {
       isLoading: false,
@@ -78,6 +80,7 @@ export default {
       repeatPassword: "",
     };
   },
+
   methods: {
     getValidationError() {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -100,21 +103,27 @@ export default {
     },
     async onConfirmBtnClicked() {
       const errorMsg = this.getValidationError();
+
       if (errorMsg) {
         this.setErrorToast(`Error! ${errorMsg}`);
         return;
       }
+
       this.isLoading = true;
       this.setLoadingToast("Registering an account...");
       try {
         await signUpUser(this.email, this.password);
+
         this.setSuccessToast("Your account has been successfully registered!");
+
         this.email = "";
         this.password = "";
         this.repeatPassword = "";
+
         this.$router.push("/");
       } catch (error) {
         const errorMsg = this.getErrorMsg(error);
+
         this.setErrorToast(
           `An error occurred while trying to register an account! ${errorMsg}`
         );

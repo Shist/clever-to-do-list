@@ -46,26 +46,33 @@ import { signOutUser } from "@/services/firebase";
 
 export default {
   name: "burger-menu",
+
   mixins: [toastMixin, errorMsgMixin],
+
   data() {
     return {
       menuIsOpened: false,
     };
   },
+
   methods: {
     async onLogOutBtnClicked() {
       try {
         await signOutUser();
+
         this.menuIsOpened = false;
+
         this.$router.push("/sign-in");
       } catch (error) {
         const errorMsg = this.getErrorMsg(error);
+
         this.setErrorToast(
           `An error occurred while trying to log out! ${errorMsg}`
         );
       }
     },
   },
+
   computed: {
     ...mapState({
       userEmail: (state) => state.userData.userEmail,
