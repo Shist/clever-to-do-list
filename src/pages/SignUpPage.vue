@@ -65,7 +65,6 @@
 <script>
 import toastMixin from "@/mixins/toastMixin";
 import errorMsgMixin from "@/mixins/errorMsgMixin.js";
-import { mapState, mapMutations } from "vuex";
 import { signUpUser } from "@/services/firebase";
 
 export default {
@@ -74,14 +73,12 @@ export default {
   data() {
     return {
       isLoading: false,
+      email: "",
+      password: "",
+      repeatPassword: "",
     };
   },
   methods: {
-    ...mapMutations({
-      setEmail: "signUp/setEmail",
-      setPassword: "signUp/setPassword",
-      setRepeatPassword: "signUp/setRepeatPassword",
-    }),
     getValidationError() {
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -124,37 +121,6 @@ export default {
       } finally {
         this.isLoading = false;
       }
-    },
-  },
-  computed: {
-    ...mapState({
-      emailState: (state) => state.signUp.email,
-      passwordState: (state) => state.signUp.password,
-      repeatPasswordState: (state) => state.signUp.repeatPassword,
-    }),
-    email: {
-      get() {
-        return this.emailState;
-      },
-      set(newValue) {
-        this.setEmail(newValue);
-      },
-    },
-    password: {
-      get() {
-        return this.passwordState;
-      },
-      set(newValue) {
-        this.setPassword(newValue);
-      },
-    },
-    repeatPassword: {
-      get() {
-        return this.repeatPasswordState;
-      },
-      set(newValue) {
-        this.setRepeatPassword(newValue);
-      },
     },
   },
 };

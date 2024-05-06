@@ -82,6 +82,10 @@ export default {
   data() {
     return {
       isLoading: false,
+      title: "",
+      description: "",
+      date: format(new Date(), "yyyy-MM-dd"),
+      checked: "unchecked",
     };
   },
   methods: {
@@ -119,40 +123,6 @@ export default {
       } finally {
         this.isLoading = true;
       }
-    },
-  },
-  computed: {
-    title: {
-      get() {
-        return this.$store.state.taskCreation.title;
-      },
-      set(newValue) {
-        this.$store.commit("taskCreation/setTitle", newValue);
-      },
-    },
-    description: {
-      get() {
-        return this.$store.state.taskCreation.description;
-      },
-      set(newValue) {
-        this.$store.commit("taskCreation/setDescription", newValue);
-      },
-    },
-    date: {
-      get() {
-        return this.$store.state.taskCreation.date;
-      },
-      set(newValue) {
-        this.$store.commit("taskCreation/setDate", newValue);
-      },
-    },
-    checked: {
-      get() {
-        return this.$store.state.taskCreation.checked;
-      },
-      set(newValue) {
-        this.$store.commit("taskCreation/setChecked", newValue);
-      },
     },
   },
 };

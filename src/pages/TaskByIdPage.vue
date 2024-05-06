@@ -67,7 +67,7 @@
         <div class="task-by-id-page__edit-btns-wrapper">
           <button
             class="task-by-id-page__btn task-by-id-page__btn_edit"
-            @click="setIsEdit(!isEdit)"
+            @click="isEdit = !isEdit"
             :disabled="isEdit || isLoading"
           ></button>
           <button
@@ -133,7 +133,7 @@ import { format } from "date-fns";
 import toastMixin from "@/mixins/toastMixin.js";
 import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
 import taskValidationMixin from "@/mixins/taskValidationMixin.js";
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 import { changeExistingTask, deleteExistingTask } from "@/services/firebase";
 
 export default {
@@ -144,12 +144,14 @@ export default {
       currTask: null,
       deleteModalIsOpen: false,
       isLoading: false,
+      isEdit: false,
+      title: "",
+      description: "",
+      date: format(new Date(), "yyyy-MM-dd"),
+      checked: "unchecked",
     };
   },
   methods: {
-    ...mapMutations({
-      setIsEdit: "taskEdit/setIsEdit",
-    }),
     currTaskById(id) {
       return this.userTasks.find((task) => task.id === id);
     },
@@ -175,7 +177,7 @@ export default {
       }
     },
     onBackBtnClicked() {
-      this.setIsEdit(false);
+      this.isEdit = false;
       this.$router.push("/");
     },
     updateCurrItem() {
@@ -195,7 +197,7 @@ export default {
     },
     onEditCancelBtnClicked() {
       this.updateCurrItem();
-      this.setIsEdit(false);
+      this.isEdit = false;
     },
     async onCheckedBtnClicked() {
       this.isLoading = true;
@@ -213,7 +215,7 @@ export default {
         this.updateCurrItem();
 
         this.setSuccessToast("You have successfully edited the task status!");
-        this.setIsEdit(false);
+        this.isEdit = false;
         this.$router.push("/");
       } catch (error) {
         this.setErrorToast(
@@ -247,7 +249,7 @@ export default {
         this.updateCurrItem();
 
         this.setSuccessToast("You have successfully edited the task!");
-        this.setIsEdit(false);
+        this.isEdit = false;
       } catch (error) {
         this.setErrorToast(
           `An error occurred while trying to edit the task! ${error.message}`
@@ -279,41 +281,8 @@ export default {
   },
   computed: {
     ...mapState({
-      isEdit: (state) => state.taskEdit.isEdit,
       userTasks: (state) => state.userData.userTasks,
     }),
-    title: {
-      get() {
-        return this.$store.state.taskEdit.title;
-      },
-      set(newValue) {
-        this.$store.commit("taskEdit/setTitle", newValue);
-      },
-    },
-    description: {
-      get() {
-        return this.$store.state.taskEdit.description;
-      },
-      set(newValue) {
-        this.$store.commit("taskEdit/setDescription", newValue);
-      },
-    },
-    date: {
-      get() {
-        return this.$store.state.taskEdit.date;
-      },
-      set(newValue) {
-        this.$store.commit("taskEdit/setDate", newValue);
-      },
-    },
-    checked: {
-      get() {
-        return this.$store.state.taskEdit.checked;
-      },
-      set(newValue) {
-        this.$store.commit("taskEdit/setChecked", newValue);
-      },
-    },
     getTaskLabel() {
       return `Task for ${this.currDateById(
         this.$route.params.id

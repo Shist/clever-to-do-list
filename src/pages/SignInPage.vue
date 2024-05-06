@@ -50,7 +50,6 @@
 <script>
 import toastMixin from "@/mixins/toastMixin.js";
 import errorMsgMixin from "@/mixins/errorMsgMixin.js";
-import { mapState, mapMutations } from "vuex";
 import { signInUser } from "@/services/firebase";
 
 export default {
@@ -59,13 +58,11 @@ export default {
   data() {
     return {
       isLoading: false,
+      email: "",
+      password: "",
     };
   },
   methods: {
-    ...mapMutations({
-      setEmail: "signIn/setEmail",
-      setPassword: "signIn/setPassword",
-    }),
     async onConfirmBtnClicked() {
       this.isLoading = true;
       this.setLoadingToast("Logging...");
@@ -83,28 +80,6 @@ export default {
       } finally {
         this.isLoading = false;
       }
-    },
-  },
-  computed: {
-    ...mapState({
-      emailState: (state) => state.signIn.email,
-      passwordState: (state) => state.signIn.password,
-    }),
-    email: {
-      get() {
-        return this.emailState;
-      },
-      set(newValue) {
-        this.setEmail(newValue);
-      },
-    },
-    password: {
-      get() {
-        return this.passwordState;
-      },
-      set(newValue) {
-        this.setPassword(newValue);
-      },
     },
   },
 };
