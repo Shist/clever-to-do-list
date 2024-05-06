@@ -133,17 +133,22 @@ import { format } from "date-fns";
 import toastMixin from "@/mixins/toastMixin.js";
 import fetchTasksMixin from "@/mixins/fetchTasksMixin.js";
 import taskValidationMixin from "@/mixins/taskValidationMixin.js";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import {
   loadUserTaskById,
   changeExistingTask,
   deleteExistingTask,
 } from "@/services/firebase";
+import { Timestamp } from "firebase/firestore";
 
 export default {
   name: "task-by-id-page",
 
   mixins: [fetchTasksMixin, toastMixin, taskValidationMixin],
+
+  beforeRouteLeave() {
+    this.setCurrUserTask(null);
+  },
 
   data() {
     return {
@@ -158,6 +163,10 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      setCurrUserTask: "userData/setCurrUserTask",
+    }),
+
     getCurrDate() {
       const date = this.currUserTask?.date;
 
@@ -253,13 +262,18 @@ export default {
       this.isLoading = true;
       this.setLoadingToast("Uploading task data changes to DB...");
       try {
-        await changeExistingTask({
+        const taskObj = {
           id: this.$route.params.id,
           title: this.title,
           description: this.description,
           date: this.date,
           checked: this.checked,
-        });
+        };
+
+        await changeExistingTask(taskObj);
+
+        taskObj.date = Timestamp.fromDate(new Date(this.date));
+        this.setCurrUserTask(taskObj);
 
         await this.fetchTasks();
 
