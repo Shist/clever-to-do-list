@@ -41,14 +41,12 @@ Here is exemplary view of your .env file:
 * `VUE_APP_MESSAGING_SENDER_ID= your messaging sender id`
 * `VUE_APP_APP_ID= your app id`
 * `VUE_APP_MEASUREMENT_ID= your measurement id`
-* `VUE_APP_FIREBASE_COLLECTION_NAME= the name of you firestore collection`
-* `VUE_APP_FIREBASE_COLLECTION_LIST_FIELD= the name of the field with list of tasks inside your collection`
 
 ---
 
 ## Here is Firestore Database snapshot of user note list data:
 
-![db-snapshot](https://github.com/Shist/clever-to-do-list/assets/40572268/f5b27312-9f9b-42c5-b5ae-96631a2a0e3f)
+![db-snapshot](https://github.com/Shist/clever-to-do-list/assets/40572268/629e4957-e83f-4b33-993d-da3de5d202aa)
 
 ---
 
@@ -64,6 +62,8 @@ Here is exemplary view of your .env file:
   - The `mixins` folder stores all Vue mixins of the app, they can be reused in different places of the app
   - The `pages` folder stores all Vue components which represent the main application pages
   - The `router` folder stores the files with settings of routing of the app
+  - The `services` folder stores files containing the logic of various services
+    - The `firebase` folder stores all logic connected with Firebase service
   - The `store` folder stores Vuex files, mostly - the modules of the Vuex store
   - The `styles` folder stores all the application styles
 
@@ -80,7 +80,6 @@ Here is exemplary view of your .env file:
 - Vue Router
 - vue3-toastify
 - date-fns
-- uuid
 - ESlint (with pre-commit hooks)
 - Webpack / Babel (default from Vue)
 - Prettier
