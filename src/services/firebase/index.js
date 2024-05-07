@@ -38,11 +38,15 @@ function onFirebaseAuthStateChanged(initFoo) {
 async function signUpUser(email, password) {
   const auth = getAuth();
 
-  await createUserWithEmailAndPassword(auth, email, password);
+  const newUserInfo = await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+  );
 
   const db = getFirestore();
 
-  await setDoc(doc(db, "users", store.state.userData.userUid), {});
+  await setDoc(doc(db, "users", newUserInfo.user.uid), {});
 }
 
 async function signInUser(email, password) {
