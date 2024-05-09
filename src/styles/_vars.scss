@@ -1,0 +1,38 @@
+@import "@/assets/fonts/Roboto-Bold/font-roboto-bold.css";
+@import "@/assets/fonts/Roboto-Regular/font-roboto-regular.css";
+
+// Fonts
+$font-roboto: "Roboto";
+
+// Main colors
+$color-black: #000000;
+$color-white: #ffffff;
+$color-gray: #777777;
+$color-light-gray: #afafaf;
+$color-very-light-gray: #efefef;
+$color-global-bg: #ececec;
+$color-orange: #ff611a;
+$color-light-orange: #ff8c2c;
+$color-yellow: #f7c832;
+$color-info: #ffff80;
+$color-success: #80ff80;
+$color-error: #ff4040;
+$color-light-green: #ccffcc;
+$color-green-text: #3a9f65;
+$color-light-yellow: #ffffcc;
+$color-yellow-text: #9f9f65;
+$color-link-active: #ffec8b;
+
+// Default checkpoints for adaptive
+$pc-l: 1440px;
+$pc-m: 1400px;
+$pc-s: 1280px;
+$laptop-l: 1024px;
+$laptop-m: 960px;
+$laptop-s: 864px;
+$tablet-l: 768px;
+$tablet-m: 640px;
+$tablet-s: 576px;
+$phone-l: 480px;
+$phone-m: 360px;
+$phone-s: 320px;
