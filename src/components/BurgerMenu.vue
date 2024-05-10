@@ -160,7 +160,6 @@ export default {
       align-items: center;
       row-gap: 10px;
       .burger-menu__nav-list-item {
-        padding: 20px;
         border: 3px solid $color-white;
         border-radius: 10px;
         cursor: pointer;
@@ -177,6 +176,8 @@ export default {
         }
         .burger-menu__link {
           @include default-text(36px, 36px, $color-white);
+          display: inline-block;
+          padding: 20px;
           text-decoration: none;
           transition: 0.3s;
           @media (max-width: $phone-l) {
