@@ -171,9 +171,6 @@ export default {
             color: $color-yellow;
           }
         }
-        @media (max-width: $phone-l) {
-          padding: 15px;
-        }
         .burger-menu__link {
           @include default-text(36px, 36px, $color-white);
           display: inline-block;
@@ -181,6 +178,7 @@ export default {
           text-decoration: none;
           transition: 0.3s;
           @media (max-width: $phone-l) {
+            padding: 15px;
             font-size: 32px;
             line-height: 32px;
           }
