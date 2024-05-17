@@ -186,6 +186,7 @@ export default {
       margin-bottom: 40px;
     }
     .sign-up-page__confirm-btn {
+      align-self: center;
       @include default-btn(300px, $color-white, $color-orange);
       margin-bottom: 20px;
     }
