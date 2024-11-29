@@ -59,13 +59,7 @@ export default {
 
   computed: {
     getDayOfDate() {
-      const dateParts = this.date.match(/(\d+)([/.-])(\d+)([/.-])(\d+)/);
-
-      const date = new Date(dateParts[5], dateParts[3] - 1, dateParts[1]);
-
-      const day = date.getDate();
-
-      return day;
+      return new Date(this.date).getDate();
     },
   },
 };
