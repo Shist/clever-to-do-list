@@ -20,7 +20,7 @@ export const datesAndTasksModule = {
       const datesArr = [];
 
       while (firstDate <= lastDate) {
-        const firstDateStr = firstDate.toLocaleDateString();
+        const firstDateStr = firstDate.toDateString();
 
         const dateInfoObj = {
           date: firstDateStr,
