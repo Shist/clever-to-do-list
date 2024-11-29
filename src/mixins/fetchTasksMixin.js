@@ -15,7 +15,7 @@ export default {
       this.userTasks.forEach((task) => {
         const dateStr = new Date(
           task.date.seconds * 1000 + task.date.nanoseconds / 1000000
-        ).toLocaleDateString();
+        ).toDateString();
 
         if (!datesInfoObj[dateStr]) {
           datesInfoObj[dateStr] = [];

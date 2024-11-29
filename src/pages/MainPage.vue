@@ -53,12 +53,14 @@ export default {
     }),
 
     getTasksListLabel() {
+      const localeDate = new Date(this.currDate).toLocaleDateString();
+
       if (this.currDateTasksAmount > 1) {
-        return `${this.currDateTasksAmount} tasks for ${this.currDate} (${this.currWeekDay})`;
+        return `${this.currDateTasksAmount} tasks for ${localeDate} (${this.currWeekDay})`;
       } else if (this.currDateTasksAmount === 1) {
-        return `${this.currDateTasksAmount} task for ${this.currDate} (${this.currWeekDay})`;
+        return `${this.currDateTasksAmount} task for ${localeDate} (${this.currWeekDay})`;
       } else {
-        return `No any tasks for ${this.currDate} (${this.currWeekDay})`;
+        return `No any tasks for ${localeDate} (${this.currWeekDay})`;
       }
     },
   },
